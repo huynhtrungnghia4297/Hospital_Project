@@ -1,0 +1,64 @@
+/* Badge styles */
+.badge {
+    display: inline-block;
+    padding: 0.5em 0.75em;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 12px;
+    color: #fff;
+  }
+  
+  .badge-warning {
+    background-color: #ffc107; /* Yellow */
+  }
+  
+  .badge-danger {
+    background-color: #dc3545; /* Red */
+  }
+  
+  .badge-success {
+    background-color: #28a745; /* Green */
+  }
+  
+  /* Toggle button styles */
+  .btn-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 25px;
+    background-color: #ccc;
+    border: none;
+    border-radius: 15px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-toggle[aria-pressed="true"] {
+    background-color: #28a745; /* Green for Open */
+  }
+  
+  .btn-toggle[aria-pressed="false"] {
+    background-color: #dc3545; /* Red for Close */
+  }
+  
+  .btn-toggle .handle {
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2.5px;
+    left: 2.5px;
+    transition: transform 0.3s ease;
+  }
+  
+  .btn-toggle[aria-pressed="true"] .handle {
+    transform: translateX(25px); /* Move to the right */
+  }
+  
+  .btn-toggle[aria-pressed="false"] .handle {
+    transform: translateX(0); /* Move to the left */
+  }
