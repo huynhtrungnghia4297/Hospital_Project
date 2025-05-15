@@ -39,7 +39,7 @@ export default class AdminSideBar extends Component {
                       <a href="index2.html">
                         <i className="icon-Commit">
                           <Link
-                            to="/admin/doctor"
+                            to="/admin/doctordashboard"
                             className="hover:bg-gray-700 p-2 rounded"
                           >
                             Doctors Dashboard

@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 
 export default class Login extends Component {
   render() {
     return (
-      <div style={{ backgroundImage: "url(../images/auth-bg/bg-1.jpg)" , height: "100vh", backgroundSize: "cover", backgroundPosition: "center" }}>
-        <div
-          className="mt-5 "
-        
-        >
+      <div
+        style={{
+          backgroundImage: "url(../images/auth-bg/bg-1.jpg)",
+          height: "100vh",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="mt-5 ">
           <div className="container h-p100 mt-5">
             <div className="row align-items-center justify-content-md-center h-p100">
               <div className="col-12">
@@ -23,8 +28,8 @@ export default class Login extends Component {
                       </div>
                       <div className="p-40">
                         <form
-                          action="https://medical-admin-template.multipurposethemes.com/main/index.html"
-                          method="post"
+                          // action="https://medical-admin-template.multipurposethemes.com/main/index.html"
+                          // method="post"
                         >
                           <div className="form-group mt-5">
                             <div className="input-group mb-3">
@@ -77,7 +82,12 @@ export default class Login extends Component {
                                 type="submit"
                                 className="btn btn-danger mt-10"
                               >
-                                SIGN IN
+                                <Link
+                                  to="/admin"
+                                  className="hover:bg-gray-700 p-2 rounded"
+                                >
+                                  SIGN IN
+                                </Link>
                               </button>
                             </div>
                             {/* /.col */}
