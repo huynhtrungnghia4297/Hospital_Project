@@ -12,14 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write # Permission to push to GitHub Packages
+      packages: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set image name
-        run: echo "IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+        run: |
+          echo "IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "Using image name: ${{ env.IMAGE_NAME }}"
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -27,6 +29,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -37,6 +42,12 @@ jobs:
           tags: |
             ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
             ghcr.io/${{ env.IMAGE_NAME }}:latest
+
+      - name: Verify image push
+        run: |
+          echo "Verifying pushed images..."
+          echo "Latest tag: ghcr.io/${{ env.IMAGE_NAME }}:latest"
+          echo "SHA tag: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}"
 
   deploy-to-production:
     needs: build_and_push_docker_image
@@ -57,12 +68,19 @@ jobs:
           password: ${{ secrets.DO_PASSWORD }}
           script: |
             # Login to GitHub Container Registry
+            echo "Logging into GitHub Container Registry..."
             echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
+            
+            # Print current images for debugging
+            echo "Current Docker images:"
+            docker images
+            
             # Variables
             IMAGE_PULL_TAG="ghcr.io/${{ env.IMAGE_NAME }}:latest"
             CONTAINER_NAME="hospital-api-container"
-
+            
+            echo "Attempting to pull image: $IMAGE_PULL_TAG"
+            
             # Stop and remove the old container
             echo "Stopping and removing old container..."
             docker stop $CONTAINER_NAME || true
@@ -71,6 +89,10 @@ jobs:
             # Pull the latest image
             echo "Pulling latest Docker image..."
             docker pull $IMAGE_PULL_TAG
+            
+            # Verify pull success
+            echo "Verifying pulled image..."
+            docker images | grep ${{ env.IMAGE_NAME }}
 
             # Run new container
             echo "Starting new container..."
@@ -83,13 +105,18 @@ jobs:
               $IMAGE_PULL_TAG
 
             # Debug logs
+            echo "Container status:"
+            docker ps -a | grep $CONTAINER_NAME
+            
             echo "Waiting 15 seconds for container to initialize..."
             sleep 15
-            echo "Fetching container logs for debugging:"
+            echo "Container logs:"
             docker logs $CONTAINER_NAME
 
             # Clean up
             echo "Cleaning up old images..."
             docker image prune -af
 
-            echo "Deployment completed successfully!"
+            echo "Deployment completed!"
+            echo "Final container status:"
+            docker ps -a | grep $CONTAINER_NAME
