@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM mcr.microsoft.com/dotnet/sdk:9.0.100-preview.2-bookworm-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
@@ -11,18 +11,19 @@ COPY . ./
 RUN dotnet publish "Hospital_API.csproj" -c Release -o /app/publish
 
 # Stage 2: Create the runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0.0-preview.2-bookworm-slim AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 
-# Copy the published files
-COPY --from=build /app/publish .
-
-# Ensure appsettings files are copied
-COPY ["appsettings.json", "appsettings.Development.json", "./"]
-
-# Set environment variables
-ENV ASPNETCORE_URLS=http://+:8080
+# Set environment variables for .NET runtime
+ENV DOTNET_EnableDiagnostics=0
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+ENV DOTNET_gcServer=1
+ENV ASPNETCORE_URLS=http://+:8080
+
+# Copy the published files and configuration
+COPY --from=build /app/publish .
+COPY ["appsettings.json", "appsettings.Development.json", "./"]
 
 EXPOSE 8080
 
