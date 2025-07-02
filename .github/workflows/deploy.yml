@@ -107,7 +107,10 @@ jobs:
               --restart always \
               -p 8080:8080 \
               -e ASPNETCORE_URLS=http://+:8080 \
+              -e DOTNET_EnableDiagnostics=0 \
               -e DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 \
+              -e DOTNET_RUNNING_IN_CONTAINER=true \
+              -e DOTNET_gcServer=1 \
               -e ConnectionStrings__DefaultConnection="${{ secrets.ASPNETCORE_CONNECTIONSTRING }}" \
               $IMAGE_PULL_TAG
             
