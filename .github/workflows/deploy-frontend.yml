@@ -11,7 +11,10 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
-    # Path filter: Only run this job if files in the React app directory have changed.
+    permissions:
+      pull-requests: read
+      contents: read
+
     defaults:
       run:
         working-directory: ./hospital-react-app
@@ -28,12 +31,11 @@ jobs:
             frontend:
               - 'hospital-react-app/**'
 
-      # Only proceed if the 'frontend' filter matched changes.
       - name: Setup Node.js
         if: steps.filter.outputs.frontend == 'true'
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # Using a recent LTS version
+          node-version: "20"
 
       - name: Install Dependencies
         if: steps.filter.outputs.frontend == 'true'
@@ -43,6 +45,19 @@ jobs:
         if: steps.filter.outputs.frontend == 'true'
         run: npm run build
 
+      # Stop frontend container before deploying
+      - name: Stop frontend container
+        if: steps.filter.outputs.frontend == 'true'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          password: ${{ secrets.DO_PASSWORD }}
+          script: |
+            docker-compose stop frontend-server
+            rm -rf /var/www/hospital-react-app/*
+
+      # Deploy the build files
       - name: Deploy to DigitalOcean
         if: steps.filter.outputs.frontend == 'true'
         uses: appleboy/scp-action@master
@@ -50,6 +65,20 @@ jobs:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }}
-          source: "hospital-react-app/dist" # Vite builds to 'dist' by default
-          target: "/var/www/hospital-react-app" # << IMPORTANT: Change this to your actual path
-          strip_components: 2
+          source: "hospital-react-app/build/*"
+          target: "/var/www/hospital-react-app"
+          strip_components: 1
+
+      # Start frontend container after deployment
+      - name: Start frontend container
+        if: steps.filter.outputs.frontend == 'true'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          password: ${{ secrets.DO_PASSWORD }}
+          script: |
+            sudo chown -R www-data:www-data /var/www/hospital-react-app
+            sudo find /var/www/hospital-react-app -type d -exec chmod 755 {} \;
+            sudo find /var/www/hospital-react-app -type f -exec chmod 644 {} \;
+            docker-compose start frontend-server
