@@ -2,18 +2,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Copy solution and project files first to leverage Docker layer caching
-COPY ["Hospital_Project.sln", "./"]
+# Copy project file and restore dependencies
 COPY ["Hospital_API/Hospital_API.csproj", "Hospital_API/"]
-
-# Restore dependencies for the entire solution
-RUN dotnet restore "Hospital_Project.sln"
+WORKDIR "/src/Hospital_API"
+RUN dotnet restore "Hospital_API.csproj"
 
 # Copy the rest of the application's source code
-COPY . .
-WORKDIR "/src/Hospital_API"
+COPY ["Hospital_API/", "."]
 
-# Publish the application, creating the deployable files
+# Build and publish the application
 RUN dotnet build "Hospital_API.csproj" -c Release --no-restore
 RUN dotnet publish "Hospital_API.csproj" -c Release -o /app/publish --no-restore
 
