@@ -108,9 +108,13 @@ jobs:
               -p 8080:8080 \
               -e ASPNETCORE_URLS=http://+:8080 \
               -e DOTNET_EnableDiagnostics=0 \
-              -e DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 \
+              -e DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
               -e DOTNET_RUNNING_IN_CONTAINER=true \
               -e DOTNET_gcServer=1 \
+              -e LANG=en_US.UTF-8 \
+              -e LANGUAGE=en_US:en \
+              -e LC_ALL=en_US.UTF-8 \
+              -e TZ=Asia/Ho_Chi_Minh \
               -e ConnectionStrings__DefaultConnection="${{ secrets.ASPNETCORE_CONNECTIONSTRING }}" \
               $IMAGE_PULL_TAG
             
