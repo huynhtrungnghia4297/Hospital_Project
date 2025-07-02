@@ -14,16 +14,23 @@ RUN dotnet publish "Hospital_API.csproj" -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 
-# Install ICU packages
-RUN apt-get update && apt-get install -y icu-devtools
+# Install required packages for globalization support
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        locales \
+        tzdata \
+        libicu-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && locale-gen en_US.UTF-8
 
-# Set environment variables for .NET runtime
-ENV DOTNET_EnableDiagnostics=0
-ENV DOTNET_RUNNING_IN_CONTAINER=true
-ENV DOTNET_gcServer=1
-ENV ASPNETCORE_URLS=http://+:8080
+# Set environment variables
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+ENV TZ=Asia/Ho_Chi_Minh
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
-ENV DOTNET_SYSTEM_GLOBALIZATION_PREDEFINED_CULTURES_ONLY=false
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+ENV ASPNETCORE_URLS=http://+:8080
 
 # Copy the published files and configuration
 COPY --from=build /app/publish .
