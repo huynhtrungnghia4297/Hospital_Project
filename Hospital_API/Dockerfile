@@ -16,10 +16,13 @@ WORKDIR /app
 
 # Set environment variables for .NET runtime
 ENV DOTNET_EnableDiagnostics=0
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 ENV DOTNET_RUNNING_IN_CONTAINER=true
 ENV DOTNET_gcServer=1
 ENV ASPNETCORE_URLS=http://+:8080
+# Use en-US culture
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 # Copy the published files and configuration
 COPY --from=build /app/publish .
