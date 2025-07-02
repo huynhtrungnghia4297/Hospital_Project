@@ -100,30 +100,40 @@ jobs:
               exit 1
             fi
             
-            # Run new container
+            # Run new container with proper environment variables
             echo "Starting new container..."
             docker run -d \
               --name $CONTAINER_NAME \
               --restart always \
               -p 8080:8080 \
               -e ASPNETCORE_URLS=http://+:8080 \
-              -e "ConnectionStrings__DefaultConnection=${{ secrets.ASPNETCORE_CONNECTIONSTRING }}" \
+              -e DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 \
+              -e ConnectionStrings__DefaultConnection="${{ secrets.ASPNETCORE_CONNECTIONSTRING }}" \
               $IMAGE_PULL_TAG
             
             # Verify container is running
             if docker ps | grep -q "$CONTAINER_NAME"; then
               echo "Container successfully started"
+              
+              # Wait for container to initialize
+              echo "Waiting for container to initialize..."
+              sleep 15
+              
+              # Check container logs
+              echo "Container logs:"
+              docker logs $CONTAINER_NAME
+              
+              # Check if container is still running
+              if ! docker ps | grep -q "$CONTAINER_NAME"; then
+                echo "Container stopped after startup. Checking logs..."
+                docker logs $CONTAINER_NAME
+                exit 1
+              fi
             else
               echo "Container failed to start"
               docker logs $CONTAINER_NAME
               exit 1
             fi
-            
-            # Show container status and logs
-            echo "Container status:"
-            docker ps -a | grep $CONTAINER_NAME
-            echo "Container logs:"
-            docker logs $CONTAINER_NAME
             
             # Cleanup
             echo "Cleaning up old images..."
