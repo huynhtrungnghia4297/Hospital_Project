@@ -18,17 +18,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set image name
+      - name: Set image name and registry
         run: |
           echo "IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-          echo "Using image name: ${{ env.IMAGE_NAME }}"
+          echo "REGISTRY=ghcr.io" >> $GITHUB_ENV
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.CR_PAT }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -43,57 +43,63 @@ jobs:
             ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
             ghcr.io/${{ env.IMAGE_NAME }}:latest
 
-      - name: Verify image push
-        run: |
-          echo "Verifying pushed images..."
-          echo "Latest tag: ghcr.io/${{ env.IMAGE_NAME }}:latest"
-          echo "SHA tag: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}"
-
   deploy-to-production:
     needs: build_and_push_docker_image
     runs-on: ubuntu-latest
-
     environment:
       name: production
 
     steps:
-      - name: Set image name
-        run: echo "IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+      - name: Set environment variables
+        run: |
+          echo "IMAGE_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "REGISTRY=ghcr.io" >> $GITHUB_ENV
 
-      - name: Deploy to DigitalOcean Droplet via Docker
+      - name: Deploy to DigitalOcean Droplet
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }}
           script: |
-            # Login to GitHub Container Registry
-            echo "Logging into GitHub Container Registry..."
-            echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            # Create auth file for non-interactive login
+            mkdir -p ~/.docker
+            echo '{"auths":{"ghcr.io":{"auth":"'$(echo -n "${{ github.actor }}:${{ secrets.CR_PAT }}" | base64)'"}}}'> ~/.docker/config.json
             
-            # Print current images for debugging
-            echo "Current Docker images:"
-            docker images
-            
-            # Variables
+            # Set variables
             IMAGE_PULL_TAG="ghcr.io/${{ env.IMAGE_NAME }}:latest"
             CONTAINER_NAME="hospital-api-container"
             
-            echo "Attempting to pull image: $IMAGE_PULL_TAG"
+            echo "Authenticating with GitHub Container Registry..."
+            docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.CR_PAT }}
             
-            # Stop and remove the old container
+            echo "Current Docker images:"
+            docker images
+            
+            # Stop and remove existing container
             echo "Stopping and removing old container..."
             docker stop $CONTAINER_NAME || true
             docker rm $CONTAINER_NAME || true
-
-            # Pull the latest image
-            echo "Pulling latest Docker image..."
+            
+            # Pull new image
+            echo "Pulling latest Docker image: $IMAGE_PULL_TAG"
             docker pull $IMAGE_PULL_TAG
             
-            # Verify pull success
-            echo "Verifying pulled image..."
-            docker images | grep ${{ env.IMAGE_NAME }}
-
+            if [ $? -ne 0 ]; then
+              echo "Failed to pull image. Retrying with fresh login..."
+              docker logout ghcr.io
+              docker login ghcr.io -u ${{ github.actor }} --password ${{ secrets.CR_PAT }}
+              docker pull $IMAGE_PULL_TAG
+            fi
+            
+            # Verify image exists
+            if docker images | grep -q "${{ env.IMAGE_NAME }}"; then
+              echo "Image successfully pulled"
+            else
+              echo "Failed to pull image"
+              exit 1
+            fi
+            
             # Run new container
             echo "Starting new container..."
             docker run -d \
@@ -103,20 +109,24 @@ jobs:
               -e ASPNETCORE_URLS=http://+:8080 \
               -e "ConnectionStrings__DefaultConnection=${{ secrets.ASPNETCORE_CONNECTIONSTRING }}" \
               $IMAGE_PULL_TAG
-
-            # Debug logs
+            
+            # Verify container is running
+            if docker ps | grep -q "$CONTAINER_NAME"; then
+              echo "Container successfully started"
+            else
+              echo "Container failed to start"
+              docker logs $CONTAINER_NAME
+              exit 1
+            fi
+            
+            # Show container status and logs
             echo "Container status:"
             docker ps -a | grep $CONTAINER_NAME
-            
-            echo "Waiting 15 seconds for container to initialize..."
-            sleep 15
             echo "Container logs:"
             docker logs $CONTAINER_NAME
-
-            # Clean up
+            
+            # Cleanup
             echo "Cleaning up old images..."
             docker image prune -af
-
-            echo "Deployment completed!"
-            echo "Final container status:"
-            docker ps -a | grep $CONTAINER_NAME
+            
+            echo "Deployment completed successfully!"
