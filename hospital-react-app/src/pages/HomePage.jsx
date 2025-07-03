@@ -24,12 +24,11 @@ const Home = () => {
                                 className="sub-heading bg-light py-2 px-4 mb-4 border-radius-30 text-uppercase d-inline-block text-cadet-blue fw-medium">
                                 <svg className="heart primary-color me-2" width="20" height="20">
                                     <use href="#heart" />
-                                </svg>Live your life
+                                </svg>Sống Cuộc Sống Của Bạn
                             </span>
-                            <h1 className="display-3 fw-bold text-dark">We Care About Your Health</h1>
-                            <p className="mt-3 mb-4">Vitae aliquam vestibulum elit adipiscing massa diam in dignissim. Risus tellus libero
-                                elementum aliquam etiam. Lectus adipiscing est auctor mi quisque nunc non viverra est.</p>
-                            <Link to="/contact" className="btn btn-medium btn-primary btn-pill text-uppercase">Contact us</Link>
+                            <h1 className="display-3 fw-bold text-dark">Chúng Tôi Quan Tâm Đến Sức Khỏe Của Bạn</h1>
+                            <p className="mt-3 mb-4">Chúng tôi cam kết mang đến dịch vụ chăm sóc sức khỏe tốt nhất với đội ngũ bác sĩ chuyên nghiệp và trang thiết bị hiện đại. Sức khỏe của bạn là ưu tiên hàng đầu của chúng tôi.</p>
+                            <Link to="/contact" className="btn btn-medium btn-primary btn-pill text-uppercase">Liên Hệ</Link>
                         </div>
                     </div>
                 </div>
@@ -45,41 +44,40 @@ const Home = () => {
                                     className="counter-number text-primary-500 display-2 fw-semibold d-flex align-items-center justify-content-center">
                                     <span className="counter-prefix">+</span>
                                     <h5 className="timer display-4 fw-bold m-0" data-to="5120" data-speed="8000">5120</h5>
-                                </div>
-                                <p className="counter-description">Happy Patients</p>
-                            </div>
+                                </div>                            <p className="counter-description">Bệnh Nhân Hài Lòng</p>
                         </div>
+                    </div>
 
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                            <div className="counter-info text-center">
-                                <div
-                                    className="counter-number text-primary-500 display-2 fw-semibold d-flex align-items-center justify-content-center">
-                                    <span className="counter-prefix">+</span>
-                                    <h5 className="timer display-4 fw-bold m-0" data-to="26" data-speed="8000">26</h5>
-                                </div>
-                                <p className="counter-description">Total Branches</p>
+                    <div className="col-lg-3 col-md-6 col-sm-6">
+                        <div className="counter-info text-center">
+                            <div
+                                className="counter-number text-primary-500 display-2 fw-semibold d-flex align-items-center justify-content-center">
+                                <span className="counter-prefix">+</span>
+                                <h5 className="timer display-4 fw-bold m-0" data-to="26" data-speed="8000">26</h5>
                             </div>
+                            <p className="counter-description">Tổng Chi Nhánh</p>
                         </div>
+                    </div>
 
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                            <div className="counter-info text-center">
-                                <div
-                                    className="counter-number text-primary-500 display-2 fw-semibold d-flex align-items-center justify-content-center">
-                                    <span className="counter-prefix">+</span>
-                                    <h5 className="timer display-4 fw-bold m-0" data-to="53" data-speed="8000">53</h5>
-                                </div>
-                                <p className="counter-description">Senior Doctors</p>
+                    <div className="col-lg-3 col-md-6 col-sm-6">
+                        <div className="counter-info text-center">
+                            <div
+                                className="counter-number text-primary-500 display-2 fw-semibold d-flex align-items-center justify-content-center">
+                                <span className="counter-prefix">+</span>
+                                <h5 className="timer display-4 fw-bold m-0" data-to="53" data-speed="8000">53</h5>
                             </div>
+                            <p className="counter-description">Bác Sĩ Giàu Kinh Nghiệm</p>
                         </div>
+                    </div>
 
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                            <div className="counter-info text-center">
-                                <div
-                                    className="counter-number text-primary-500 display-2 fw-semibold d-flex align-items-center justify-content-center">
-                                    <span className="counter-prefix">+</span>
-                                    <h5 className="timer display-4 fw-bold m-0" data-to="10" data-speed="8000">10</h5>
-                                </div>
-                                <p className="counter-description">Years Experience</p>
+                    <div className="col-lg-3 col-md-6 col-sm-6">
+                        <div className="counter-info text-center">
+                            <div
+                                className="counter-number text-primary-500 display-2 fw-semibold d-flex align-items-center justify-content-center">
+                                <span className="counter-prefix">+</span>
+                                <h5 className="timer display-4 fw-bold m-0" data-to="10" data-speed="8000">10</h5>
+                            </div>
+                            <p className="counter-description">Năm Kinh Nghiệm</p>
                             </div>
                         </div>
 
@@ -94,11 +92,11 @@ const Home = () => {
 
                         <div className="display-header text-light d-flex flex-wrap justify-content-between padding-medium">
                             <div className="col-lg-5 col-md-6 col-sm-12">
-                                <h2 className="text-light">Our Best Services For Your Solution</h2>
+                                <h2 className="text-light">Dịch Vụ Tốt Nhất Cho Giải Pháp Của Bạn</h2>
                             </div>
                             <div className="col-lg-6 col-md-6 col-sm-12">
-                                <p className="text-light">Vitae aliquam vestibulum elit adipiscing massa diam in dignissim. Risus tellus libero
-                                    elementum aliquam etiam. Lectus adipiscing est auctor mi quisque nunc non viverra est.</p>
+                                <p className="text-light">Chúng tôi cung cấp các dịch vụ y tế chất lượng cao với đội ngũ chuyên gia giàu kinh nghiệm. 
+                                    Cam kết mang đến sự chăm sóc tốt nhất cho sức khỏe của bạn và gia đình.</p>
                             </div>
                         </div>
 

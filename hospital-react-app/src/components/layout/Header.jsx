@@ -40,14 +40,12 @@ const Header = () => {
                   >
                     <use xlinkHref="#location"></use>
                   </svg>
-                  123 Arling, Miola, NY
-                </li>
+355 Đường 3/2 , phường 3, Quận 10                </li>
                 <li className="ps-xl-3">
                   <svg className="phone primary-color" width="24" height="24">
                     <use xlinkHref="#phone"></use>
                   </svg>
-                  (+487) 384 9452
-                </li>
+19001566                </li>
               </ul>
             </div>
             <div className="col-lg-3 col-md-4 col-sm-6">
@@ -56,7 +54,7 @@ const Header = () => {
                   to="/booking"
                   className="btn btn-medium btn-outline-primary btn-pill text-uppercase"
                 >
-                  Book Now
+                  Đặt Lịch Khám
                 </Link>
               </div>
             </div>
@@ -100,37 +98,37 @@ const Header = () => {
                   aria-current="page"
                   to="/"
                 >
-                  Home
+                  Trang chủ
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
                 <NavLink className="nav-link text-dark p-0" to="/about">
-                  About
+                  Giới thiệu
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
                 <NavLink className="nav-link text-dark p-0" to="/services">
-                  Services
+                  Dịch vụ
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
                 <NavLink className="nav-link text-dark p-0" to="/booking">
-                  Booking
+                  Đặt lịch khám
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
                 <NavLink className="nav-link text-dark p-0" to="/team">
-                  Team
+                  Đội ngũ bác sĩ
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
                 <NavLink className="nav-link text-dark p-0" to="/faq">
-                  Faqs
+                  Câu hỏi thường gặp
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
                 <NavLink className="nav-link text-dark p-0" to="/departments">
-                  Department
+                  Khoa khám bệnh
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-3 dropdown border-right">
@@ -141,15 +139,11 @@ const Header = () => {
                   role="button"
                   aria-expanded="false"
                 >
-                  Pages{" "}
+                  Trang{" "}
                   <iconify-icon icon="iconamoon:arrow-down-2-fill"></iconify-icon>{" "}
                 </a>
                 <ul className="dropdown-menu">
-                  <li className="py-1">
-                    <Link to="/about" className="dropdown-item text-uppercase">
-                      About
-                    </Link>
-                  </li>
+                
                   <li className="py-1">
                     <Link to="/blog" className="dropdown-item text-uppercase">
                       Blog
@@ -163,30 +157,8 @@ const Header = () => {
                       Blog-Single
                     </Link>
                   </li>
-                  <li className="py-1">
-                    <Link
-                      to="/booking"
-                      className="dropdown-item text-uppercase"
-                    >
-                      Booking
-                    </Link>
-                  </li>
-                  <li className="py-1">
-                    <Link
-                      to="/services"
-                      className="dropdown-item text-uppercase"
-                    >
-                      Services
-                    </Link>
-                  </li>
-                  <li className="py-1">
-                    <Link
-                      to="/departments"
-                      className="dropdown-item text-uppercase"
-                    >
-                      Departments
-                    </Link>
-                  </li>
+                  
+                 
                   <li className="py-1">
                     <Link
                       to="/gallery"
@@ -200,7 +172,7 @@ const Header = () => {
                       to="/pricing"
                       className="dropdown-item text-uppercase"
                     >
-                      Pricing
+                      Giá dịch vụ
                     </Link>
                   </li>
                   <li className="py-1">
@@ -211,32 +183,11 @@ const Header = () => {
                       Contact
                     </Link>
                   </li>
-                  <li className="py-1">
-                    <Link to="/team" className="dropdown-item text-uppercase">
-                      Our Team
-                    </Link>
-                  </li>
-                  <li className="py-1">
-                    <Link to="/review" className="dropdown-item text-uppercase">
-                      Reviews
-                    </Link>
-                  </li>
-                  <li className="py-1">
-                    <Link to="/faq" className="dropdown-item text-uppercase">
-                      FAQs
-                    </Link>
-                  </li>
+                 
                 </ul>
               </li>
 
-              <li className="nav-item ps-4 pe-4 ">
-                <a
-                  className="nav-link get-pro text-dark fw-bold p-0"
-                  href="https://templatesjungle.gumroad.com/l/free-insove-medical-healthcare-bootstrap-5-html-website-template"
-                >
-                  GET PRO
-                </a>
-              </li>
+              
             </ul>
             <form className="search-form mb-3 mb-lg-0" role="search">
               <svg
