@@ -47,6 +47,18 @@ jobs:
         if: steps.filter.outputs.frontend == 'true'
         run: npm run build
 
+      # Clear target directory before deploying
+      - name: Clear target directory
+        if: steps.filter.outputs.frontend == 'true'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          password: ${{ secrets.DO_PASSWORD }}
+          script: |
+            rm -rf /var/www/hospital-react-app/*
+
+      # Deploy the build files
       - name: Deploy to DigitalOcean
         if: steps.filter.outputs.frontend == 'true'
         uses: appleboy/scp-action@master
@@ -54,6 +66,21 @@ jobs:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }}
-          source: "hospital-react-app/dist" # Vite builds to 'dist' by default
-          target: "/var/www/hospital-react-app" # << IMPORTANT: Change this to your actual path
-          strip_components: 2
+          source: "hospital-react-app/build/*"
+          target: "/var/www/hospital-react-app"
+          strip_components: 1
+          overwrite: true
+
+      # Set correct permissions after deployment
+      - name: Set permissions and restart container
+        if: steps.filter.outputs.frontend == 'true'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          password: ${{ secrets.DO_PASSWORD }}
+          script: |
+            sudo chown -R www-data:www-data /var/www/hospital-react-app
+            sudo find /var/www/hospital-react-app -type d -exec chmod 755 {} \;
+            sudo find /var/www/hospital-react-app -type f -exec chmod 644 {} \;
+            docker-compose restart frontend-server
