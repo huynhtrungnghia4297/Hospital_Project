@@ -45,8 +45,15 @@ jobs:
         if: steps.filter.outputs.frontend == 'true'
         run: npm run build
 
-      # Stop frontend container before deploying
-      - name: Stop frontend container
+      # Create deployment archive
+      - name: Create deployment archive
+        if: steps.filter.outputs.frontend == 'true'
+        run: |
+          cd build
+          tar -czf ../frontend-deploy.tar.gz .
+
+      # Stop container and clean directory
+      - name: Stop container and clean directory
         if: steps.filter.outputs.frontend == 'true'
         uses: appleboy/ssh-action@master
         with:
@@ -54,23 +61,24 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }}
           script: |
+            cd /root/nginx-proxy-manager
             docker-compose stop frontend-server
             rm -rf /var/www/hospital-react-app/*
 
-      # Deploy the build files
-      - name: Deploy to DigitalOcean
+      # Upload and deploy
+      - name: Upload build files
         if: steps.filter.outputs.frontend == 'true'
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }}
-          source: "hospital-react-app/build/*"
+          source: "hospital-react-app/frontend-deploy.tar.gz"
           target: "/var/www/hospital-react-app"
           strip_components: 1
 
-      # Start frontend container after deployment
-      - name: Start frontend container
+      # Extract and start container
+      - name: Extract files and start container
         if: steps.filter.outputs.frontend == 'true'
         uses: appleboy/ssh-action@master
         with:
@@ -78,7 +86,11 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }}
           script: |
-            sudo chown -R www-data:www-data /var/www/hospital-react-app
-            sudo find /var/www/hospital-react-app -type d -exec chmod 755 {} \;
-            sudo find /var/www/hospital-react-app -type f -exec chmod 644 {} \;
+            cd /var/www/hospital-react-app
+            tar -xzf frontend-deploy.tar.gz
+            rm frontend-deploy.tar.gz
+            sudo chown -R www-data:www-data .
+            sudo find . -type d -exec chmod 755 {} \;
+            sudo find . -type f -exec chmod 644 {} \;
+            cd /root/nginx-proxy-manager
             docker-compose start frontend-server
