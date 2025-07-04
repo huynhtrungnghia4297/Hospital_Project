@@ -95,7 +95,7 @@ const BookingPage = () => {
                         <div className="col-lg-3 pb-4">
                             <div className="py-5 plan-post text-center">
                                 <h6 className="mb-3">Tiêu chuẩn</h6>
-                                <h2 className="heading-color display-5 fw-bold mb-5">$56.95</h2>
+                                <h2 className="heading-color display-5 fw-bold mb-5">1,425,000 VNĐ</h2>
                                 <div className="price-option">
                                     <p><span className="price-tick">✓</span> Khám tổng quát</p>
                                     <p><span className="price-tick">✓</span> Xét nghiệm cơ bản</p>
@@ -109,7 +109,7 @@ const BookingPage = () => {
                         <div className="col-lg-3 pb-4">
                             <div className="py-5 plan-post recommend-price text-center">
                                 <h6 className="text-white mb-3">Cơ bản</h6>
-                                <h2 className="text-white display-5 fw-bold mb-5">$79.50</h2>
+                                <h2 className="text-white display-5 fw-bold mb-5">1,990,000 VNĐ</h2>
                                 <div className="price-option">
                                     <p className="text-white"><span className="price-tick text-white">✓</span> Gói Tiêu chuẩn</p>
                                     <p className="text-white"><span className="price-tick text-white">✓</span> Siêu âm ổ bụng</p>
@@ -125,7 +125,7 @@ const BookingPage = () => {
                         <div className="col-lg-3 pb-4">
                             <div className="py-5 plan-post text-center">
                                 <h6 className="mb-3">Cao cấp</h6>
-                                <h2 className="heading-color display-5 fw-bold mb-5">$103.40</h2>
+                                <h2 className="heading-color display-5 fw-bold mb-5">2,590,000 VNĐ</h2>
                                 <div className="price-option">
                                     <p><span className="price-tick">✓</span> Gói Cơ bản</p>
                                     <p><span className="price-tick">✓</span> Chụp CT-Scanner</p>
@@ -141,7 +141,7 @@ const BookingPage = () => {
                         <div className="col-lg-3 pb-4">
                             <div className="py-5 plan-post text-center">
                                 <h6 className="mb-3">Toàn diện</h6>
-                                <h2 className="heading-color display-5 fw-bold mb-5">$190.50</h2>
+                                <h2 className="heading-color display-5 fw-bold mb-5">4,760,000 VNĐ</h2>
                                 <div className="price-option">
                                     <p><span className="price-tick">✓</span> Gói Cao cấp</p>
                                     <p><span className="price-tick">✓</span> Chụp MRI</p>

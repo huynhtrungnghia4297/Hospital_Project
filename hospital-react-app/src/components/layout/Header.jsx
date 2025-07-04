@@ -94,7 +94,7 @@ const Header = () => {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item ps-4 pe-4 border-right">
                 <NavLink
-                  className="nav-link text-dark p-0 mt-3 mt-lg-0"
+                  className="nav-link text-dark p-0 mt-3 mt-lg-0 text-nowrap"
                   aria-current="page"
                   to="/"
                 >
@@ -102,38 +102,34 @@ const Header = () => {
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
-                <NavLink className="nav-link text-dark p-0" to="/about">
+                <NavLink className="nav-link text-dark p-0 text-nowrap" to="/about">
                   Giới thiệu
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
-                <NavLink className="nav-link text-dark p-0" to="/services">
+                <NavLink className="nav-link text-dark p-0 text-nowrap" to="/services">
                   Dịch vụ
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
-                <NavLink className="nav-link text-dark p-0" to="/booking">
+                <NavLink className="nav-link text-dark p-0 text-nowrap" to="/booking">
                   Đặt lịch khám
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-4 border-right">
-                <NavLink className="nav-link text-dark p-0" to="/team">
+                <NavLink className="nav-link text-dark p-0 text-nowrap" to="/team">
                   Đội ngũ bác sĩ
                 </NavLink>
               </li>
+            
               <li className="nav-item ps-4 pe-4 border-right">
-                <NavLink className="nav-link text-dark p-0" to="/faq">
-                  Câu hỏi thường gặp
-                </NavLink>
-              </li>
-              <li className="nav-item ps-4 pe-4 border-right">
-                <NavLink className="nav-link text-dark p-0" to="/departments">
+                <NavLink className="nav-link text-dark p-0 text-nowrap" to="/departments">
                   Khoa khám bệnh
                 </NavLink>
               </li>
               <li className="nav-item ps-4 pe-3 dropdown border-right">
                 <a
-                  className="nav-link text-dark p-0 dropdown-toggle"
+                  className="nav-link text-dark p-0 dropdown-toggle text-nowrap"
                   data-bs-toggle="dropdown"
                   href="#"
                   role="button"
@@ -180,7 +176,7 @@ const Header = () => {
                       to="/contact"
                       className="dropdown-item text-uppercase"
                     >
-                      Contact
+                      Liên hệ
                     </Link>
                   </li>
                  
