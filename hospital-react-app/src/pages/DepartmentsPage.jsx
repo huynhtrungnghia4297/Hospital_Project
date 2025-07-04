@@ -8,9 +8,9 @@ export default function DepartmentsPage() {
       <section id="intro" style={{ backgroundColor: '#E8F0F1' }}>
         <div className="container">
           <div className="banner-content padding-large">
-            <h1 className="display-3 fw-bold text-dark">Departments</h1>
-            <span className="item"><Link to="/" className="">Home</Link></span> &nbsp; <span className="">/</span> &nbsp;
-            <span className="item">Departments</span>
+            <h1 className="display-3 fw-bold text-dark">Chuyên Khoa</h1>
+            <span className="item"><Link to="/" className="">Trang chủ</Link></span> &nbsp; <span className="">/</span> &nbsp;
+            <span className="item">Chuyên Khoa</span>
           </div>
         </div>
       </section>
@@ -21,53 +21,53 @@ export default function DepartmentsPage() {
             <main className="post-grid col-md-9">
               <div className="row">
                 <article className="post-item">
-                  <h2 className="display-5 fw-bold pb-5 text-dark">Laboratory Analysis</h2>
-                  <p>Velit, praesent pharetra malesuada id pulvinar amet. Consequat potenti mollis massa iaculis et, dolor, eget lectus. Aliquam pellentesque molestie felis fames sed eget non euismod eget. Et eget ullamcorper urna, elit ac diam tellus viverra lacus.</p>
-                  <p>Id pulvinar amet. Consequat potenti mollis massa iaculis et, dolor, eget lectus. Aliquam pellentesque molestie felis fames sed eget non euismod eget. Et eget ullamcorper urna, elit ac diam tellus viverra lacus.</p>
+                  <h2 className="display-5 fw-bold pb-5 text-dark">Phân Tích Xét Nghiệm</h2>
+                  <p>Tại khoa xét nghiệm của chúng tôi, chúng tôi cung cấp một loạt các dịch vụ phân tích để hỗ trợ chẩn đoán và theo dõi bệnh. Đội ngũ kỹ thuật viên giàu kinh nghiệm cùng hệ thống máy móc hiện đại đảm bảo kết quả chính xác và kịp thời.</p>
+                  <p>Chúng tôi thực hiện các xét nghiệm từ cơ bản đến chuyên sâu, bao gồm huyết học, sinh hóa, miễn dịch và vi sinh, đáp ứng mọi nhu cầu của bệnh nhân và bác sĩ.</p>
                   <div className="hero-image mt-5">
                     <img src="/images/blog-large1.jpg" alt="single-post" className="img-fluid" />
                   </div>
                   <div className="post-content py-5">
                     <div className="post-description">
-                      <blockquote>"Sit suscipit tortor turpis sed fringilla lectus facilisis amet. Ipsum, amet dolor curabitur non aliquet orci urna volutpat. Id aliquam neque, ut vivamus sit imperdiet enim, lacus, vel."</blockquote>
-                      <h2 className="my-5">Investigation and Treatments</h2>
+                      <blockquote>"Sự chính xác trong từng kết quả xét nghiệm là nền tảng cho một chẩn đoán đúng và một phác đồ điều trị hiệu quả. Chúng tôi cam kết mang lại sự tin cậy tuyệt đối cho bệnh nhân và đồng nghiệp."</blockquote>
+                      <h2 className="my-5">Chẩn Đoán và Điều Trị</h2>
                       <div className="row">
                         <div className="col-md-6">
                           <table className="table mb-5">
                             <thead>
                               <tr>
-                                <th scope="col">Investigation</th>
-                                <th scope="col">Costs</th>
+                                <th scope="col">Chẩn Đoán</th>
+                                <th scope="col">Chi Phí</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
-                                <td scope="row">Colonoscopy</td>
-                                <td className="text-primary">$250</td>
+                                <td scope="row">Nội soi đại tràng</td>
+                                <td className="text-primary">6,250,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">Gastroscopy</td>
-                                <td className="text-primary">$236</td>
+                                <td scope="row">Nội soi dạ dày</td>
+                                <td className="text-primary">5,900,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">Allergy testing</td>
-                                <td className="text-primary">$150</td>
+                                <td scope="row">Xét nghiệm dị ứng</td>
+                                <td className="text-primary">3,750,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">CT scan</td>
-                                <td className="text-primary">$565</td>
+                                <td scope="row">Chụp CT</td>
+                                <td className="text-primary">14,125,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">Cardiac CT scan</td>
-                                <td className="text-primary">$300</td>
+                                <td scope="row">Chụp CT tim</td>
+                                <td className="text-primary">7,500,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">Paratryroid scan</td>
-                                <td className="text-primary">$180</td>
+                                <td scope="row">Xạ hình tuyến cận giáp</td>
+                                <td className="text-primary">4,500,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">Captopril renogram</td>
-                                <td className="text-primary">$320</td>
+                                <td scope="row">Xạ hình thận với Captopril</td>
+                                <td className="text-primary">8,000,000 VNĐ</td>
                               </tr>
                             </tbody>
                           </table>
@@ -76,60 +76,60 @@ export default function DepartmentsPage() {
                           <table className="table mb-5">
                             <thead>
                               <tr>
-                                <th scope="col">Treatments</th>
-                                <th scope="col">Costs</th>
+                                <th scope="col">Điều Trị</th>
+                                <th scope="col">Chi Phí</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
-                                <td scope="row">Bronchoscopy</td>
-                                <td className="text-primary">$150-300</td>
+                                <td scope="row">Nội soi phế quản</td>
+                                <td className="text-primary">3,750,000 - 7,500,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">Cardiac ablation</td>
-                                <td className="text-primary">$250-400</td>
+                                <td scope="row">Đốt điện tim</td>
+                                <td className="text-primary">6,250,000 - 10,000,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">Sport injuries</td>
-                                <td className="text-primary">$150</td>
+                                <td scope="row">Chấn thương thể thao</td>
+                                <td className="text-primary">3,750,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">Women's health</td>
-                                <td className="text-primary">$565</td>
+                                <td scope="row">Sức khỏe phụ nữ</td>
+                                <td className="text-primary">14,125,000 VNĐ</td>
                               </tr>
                               <tr>
-                                <td scope="row">Orthotics</td>
-                                <td className="text-primary">$300</td>
+                                <td scope="row">Dụng cụ chỉnh hình</td>
+                                <td className="text-primary">7,500,000 VNĐ</td>
                               </tr>
                             </tbody>
                           </table>
                         </div>
                       </div>
-                      <p>Tortor diam dignissim amet, in interdum aliquet. Magnis dictum et eros purus fermentum, massa ullamcorper sit sollicitudin. Nascetur libero elementum adipiscing mauris maecenas et magna. Etiam nec, rutrum a diam lacus, nunc integer etiam. Mattis pulvinar non viverra donec pellentesque. Odio mi consequat libero dolor. Porta ut diam lobortis eget leo, lectus.</p>
-                      <h2 className="my-5">Our Doctors</h2>
+                      <p>Chúng tôi luôn nỗ lực để cung cấp các dịch vụ y tế chất lượng cao với quy trình chuyên nghiệp và minh bạch. Sức khỏe của bạn là ưu tiên hàng đầu của chúng tôi.</p>
+                      <h2 className="my-5">Đội Ngũ Bác Sĩ Của Chúng Tôi</h2>
                       <div className="row my-4">
                         <div className="col-md-6">
                           <img src="/images/team-item1.jpg" alt="post-image" className=" img-fluid align-left" />
-                          <h5 className=" mt-3">Velit, praesent pharetra malesuada</h5>
+                          <h5 className=" mt-3">Bác sĩ chuyên khoa giàu kinh nghiệm</h5>
                         </div>
                         <div className="col-md-6">
                           <img src="/images/team-item.jpg" alt="post-image" className=" img-fluid align-right" />
-                          <h5 className=" mt-3">Velit, praesent pharetra malesuada</h5>
+                          <h5 className=" mt-3">Luôn tận tâm vì sức khỏe của bạn</h5>
                         </div>
                       </div>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Consectetur facilisis vivamus massa magna. Blandit mauris libero condimentum commodo morbi consectetur sociis convallis sit. Magna diam amet justo sed vel dolor et volutpat integer. Iaculis sit sapien hac odio elementum egestas neque. Adipiscing purus euismod orci sem amet, et. Turpis erat ornare nisi laoreet est euismod.</p>
+                      <p>Đội ngũ bác sĩ của chúng tôi không chỉ có chuyên môn cao mà còn luôn lắng nghe và thấu hiểu tâm tư của bệnh nhân. Chúng tôi tin rằng sự kết hợp giữa y học hiện đại và sự chăm sóc tận tình sẽ mang lại kết quả điều trị tốt nhất.</p>
                       <div className="my-5">
-                        <h2 className="mb-5">Our Best Services </h2>
+                        <h2 className="mb-5">Dịch Vụ Tốt Nhất Của Chúng Tôi</h2>
                         <ul className="inner-list list-unstyled">
-                          <li><span className="price-tick">✓</span> Blandit mauris libero condimentum commodo sociis convallis sit.</li>
-                          <li><span className="price-tick">✓</span> Magna diam amet justo sed vel dolor et volutpat integer.</li>
-                          <li><span className="price-tick">✓</span> Laculis sit sapien hac odio elementum egestas neque.</li>
-                          <li><span className="price-tick">✓</span> Blandit mauris libero condimentum commodo sociis convallis sit.</li>
-                          <li><span className="price-tick">✓</span> Magna diam amet justo sed vel dolor et volutpat integer.</li>
-                          <li><span className="price-tick">✓</span> Laculis sit sapien hac odio elementum egestas neque.</li>
+                          <li><span className="price-tick">✓</span> Quy trình khám chữa bệnh chuyên nghiệp và hiệu quả.</li>
+                          <li><span className="price-tick">✓</span> Trang thiết bị hiện đại, đạt tiêu chuẩn quốc tế.</li>
+                          <li><span className="price-tick">✓</span> Đội ngũ y bác sĩ tận tâm, giàu kinh nghiệm.</li>
+                          <li><span className="price-tick">✓</span> Cung cấp dịch vụ chăm sóc toàn diện cho bệnh nhân.</li>
+                          <li><span className="price-tick">✓</span> Chi phí hợp lý, minh bạch và rõ ràng.</li>
+                          <li><span className="price-tick">✓</span> Luôn đặt lợi ích và sức khỏe của bệnh nhân lên hàng đầu.</li>
                         </ul>
                       </div>
-                      <p>Tortor diam dignissim amet, in interdum aliquet. Magnis dictum et eros purus fermentum, massa ullamcorper sit sollicitudin. Nascetur libero elementum adipiscing mauris maecenas et magna. Etiam nec, rutrum a diam lacus, nunc integer etiam. Mattis pulvinar non viverra donec pellentesque. Odio mi consequat libero dolor. Porta ut diam lobortis eget leo, lectus.</p>
+                      <p>Sứ mệnh của chúng tôi là mang lại một cuộc sống khỏe mạnh và hạnh phúc hơn cho cộng đồng. Chúng tôi không ngừng cải tiến và nâng cao chất lượng dịch vụ để đáp ứng sự tin tưởng của quý vị.</p>
                     </div>
                   </div>
                 </article>
@@ -139,43 +139,43 @@ export default function DepartmentsPage() {
             <aside className="col-md-3">
               <div className="post-sidebar">
                 <div className="widget block-tag border p-3 mb-5">
-                  <h5 className="widget-title text-uppercase border-bottom pb-3 mb-3">Book Appointment</h5>
-                  <p>Blandit mauris libero condimentum commodo morbi consectetur sociis convallis sit</p>
+                  <h5 className="widget-title text-uppercase border-bottom pb-3 mb-3">Đặt Lịch Hẹn</h5>
+                  <p>Đặt lịch hẹn ngay hôm nay để được tư vấn và chăm sóc sức khỏe tốt nhất.</p>
                   <div className="btn-book">
-                    <Link to="/booking" className="btn btn-medium btn-outline-primary btn-pill text-uppercase px-4 py-3">Book Now</Link>
+                    <Link to="/booking" className="btn btn-medium btn-outline-primary btn-pill text-uppercase px-4 py-3">Đặt Ngay</Link>
                   </div>
                 </div>
                 <div className="widget sidebar-categories border p-3 mb-5">
-                  <h5 className="widget-title text-uppercase border-bottom pb-3 mb-3">Deparments</h5>
+                  <h5 className="widget-title text-uppercase border-bottom pb-3 mb-3">Các Chuyên Khoa</h5>
                   <ul className="list-unstyled">
                     <li className="my-2 d-flex align-items-center">
                       <svg width="20" height="20"><use href="#arrow-right"></use></svg>
-                      <Link to="/departments" className="item-anchor text-uppercase ps-2"> Laboratory Analysis</Link>
+                      <Link to="/departments" className="item-anchor text-uppercase ps-2">Phân Tích Xét Nghiệm</Link>
                     </li>
                     <li className="my-2 d-flex align-items-center">
                       <svg width="20" height="20"><use href="#arrow-right"></use></svg>
-                      <Link to="/departments" className="item-anchor text-uppercase ps-2"> Cardiology Clinic</Link>
+                      <Link to="/departments" className="item-anchor text-uppercase ps-2">Khoa Tim Mạch</Link>
                     </li>
                     <li className="my-2 d-flex align-items-center">
                       <svg width="20" height="20"><use href="#arrow-right"></use></svg>
-                      <Link to="/departments" className="item-anchor text-uppercase ps-2"> Gynecology Clinic</Link>
+                      <Link to="/departments" className="item-anchor text-uppercase ps-2">Khoa Phụ Sản</Link>
                     </li>
                     <li className="my-2 d-flex align-items-center">
                       <svg width="20" height="20"><use href="#arrow-right"></use></svg>
-                      <Link to="/departments" className="item-anchor text-uppercase ps-2"> Pathology Clinic</Link>
+                      <Link to="/departments" className="item-anchor text-uppercase ps-2">Khoa Giải Phẫu Bệnh</Link>
                     </li>
                     <li className="my-2 d-flex align-items-center">
                       <svg width="20" height="20"><use href="#arrow-right"></use></svg>
-                      <Link to="/departments" className="item-anchor text-uppercase ps-2"> Pediatrics Clinic</Link>
+                      <Link to="/departments" className="item-anchor text-uppercase ps-2">Khoa Nhi</Link>
                     </li>
                     <li className="my-2 d-flex align-items-center">
                       <svg width="20" height="20"><use href="#arrow-right"></use></svg>
-                      <Link to="/departments" className="item-anchor text-uppercase ps-2"> Neurology Clinic</Link>
+                      <Link to="/departments" className="item-anchor text-uppercase ps-2">Khoa Thần Kinh</Link>
                     </li>
                   </ul>
                 </div>
                 <div className="widget sidebar-recent-post mb-5">
-                  <h5 className="widget-title text-uppercase border-bottom pb-3 mb-3">Recent Posts</h5>
+                  <h5 className="widget-title text-uppercase border-bottom pb-3 mb-3">Bài Viết Gần Đây</h5>
                   <div className="sidebar-post-item d-flex justify-content-center my-2">
                     <div className="row">
                       <div className="col-md-4">
@@ -186,10 +186,10 @@ export default function DepartmentsPage() {
                       <div className="col-md-8">
                         <div className="sidebar-post-content text-uppercase">
                           <div className="post-meta fs-6 text-secondary">
-                            <span className="meta-date">jul 11, 2022</span>
+                            <span className="meta-date">11 tháng 7, 2022</span>
                           </div>
                           <h6 className="post-title">
-                            <Link to="/blog-single">How to take care of health</Link>
+                            <Link to="/blog-single">Làm thế nào để chăm sóc sức khỏe</Link>
                           </h6>
                         </div>
                       </div>
@@ -205,10 +205,10 @@ export default function DepartmentsPage() {
                       <div className="col-md-8">
                         <div className="sidebar-post-content text-uppercase">
                           <div className="post-meta fs-6 text-secondary">
-                            <span className="meta-date">jul 18, 2022</span>
+                            <span className="meta-date">18 tháng 7, 2022</span>
                           </div>
                           <h6 className="post-title">
-                            <Link to="/blog-single">Top 10 hacks for healthy life </Link>
+                            <Link to="/blog-single">Top 10 mẹo cho cuộc sống khỏe mạnh</Link>
                           </h6>
                         </div>
                       </div>
@@ -224,10 +224,10 @@ export default function DepartmentsPage() {
                       <div className="col-md-8">
                         <div className="sidebar-post-content text-uppercase">
                           <div className="post-meta fs-6 text-secondary">
-                            <span className="meta-date">Aug 21, 2022</span>
+                            <span className="meta-date">21 tháng 8, 2022</span>
                           </div>
                           <h6 className="post-title">
-                            <Link to="/blog-single">Best ways to clean your teeth</Link>
+                            <Link to="/blog-single">Cách tốt nhất để làm sạch răng của bạn</Link>
                           </h6>
                         </div>
                       </div>
