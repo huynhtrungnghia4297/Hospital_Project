@@ -7,9 +7,9 @@ const ContactPage = () => {
       <section id="intro" style={{ backgroundColor: '#E8F0F1' }}>
         <div className="container">
           <div className="banner-content padding-large">
-            <h1 className="display-3 fw-bold text-dark">Contact Us</h1>
-            <span className="item"><Link to="/" className="">Home</Link></span> &nbsp; <span className="">/</span> &nbsp; <span
-              className=" item">Contact</span>
+            <h1 className="display-3 fw-bold text-dark">Liên hệ</h1>
+            <span className="item"><Link to="/" className="">Trang chủ</Link></span> &nbsp; <span className="">/</span> &nbsp; <span
+              className=" item">Liên hệ</span>
           </div>
         </div>
       </section>
@@ -18,33 +18,33 @@ const ContactPage = () => {
         <div className="container">
           <div className="row">
             <div className="contact-info col-md-6">
-              <h2>Contact information</h2>
-              <p>Tortor dignissim convallis aenean et tortor at risus viverra adipiscing.</p>
-              <div className="page-content">
+              <h2>Thông tin liên hệ</h2>
+              <p>Chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn.</p>
+              <div className="page-content d-flex flex-wrap">
                 <div className="col-md-6">
                   <div className="content-box my-5">
-                    <h5 className="element-title text-uppercase fs-6 fw-bold ">Head Office</h5>
+                    <h5 className="element-title text-uppercase fs-6 fw-bold ">Trụ sở chính</h5>
                     <div className="contact-address">
-                      <p>730 Glenstone Ave 65802, Springfield, US</p>
-                      <p>+123 987 321</p>
+                      <p>268 Lý Thường Kiệt, P.14, Q.10, TP.HCM</p>
+                      <p>0123 456 789</p>
                       <p>
-                        <a href="mailto:">contact@yourstore.com</a>
+                        <a href="mailto:">contact@benhvien.com</a>
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="col-md-6">
                   <div className="content-box my-5">
-                    <h5 className="element-title text-uppercase fs-6 fw-bold ">OPENING HOURS</h5>
+                    <h5 className="element-title text-uppercase fs-6 fw-bold ">GIỜ MỞ CỬA</h5>
                     <div className="contact-address">
                       <p>
-                        Mon – Thu: 10:00 – 19:00
+                        Thứ 2 – Thứ 6: 08:00 – 17:00
                       </p>
                       <p>
-                        Fri – Sat: 10:00 – 16:00
+                        Thứ 7: 08:00 – 12:00
                       </p>
                       <p>
-                        Sunday: Emergency Only
+                        Chủ nhật: Chỉ nhận cấp cứu
                       </p>
                     </div>
                   </div>
@@ -52,22 +52,22 @@ const ContactPage = () => {
               </div>
             </div>
             <div className="inquiry-form col-md-6">
-              <h2>have any question?</h2>
-              <p>Tortor dignissim convallis aenean et tortor at risus viverra adipiscing.</p>
+              <h2>Bạn có câu hỏi nào không?</h2>
+              <p>Vui lòng điền vào biểu mẫu bên dưới và chúng tôi sẽ liên hệ lại với bạn sớm nhất có thể.</p>
               <form action="#" method="post" className="form-group mt-5">
                 <div className="row">
                   <div className="col-md-6">
-                    <input type="text" name="name" placeholder="Write Your Name" className="form-control" />
+                    <input type="text" name="name" placeholder="Nhập tên của bạn" className="form-control" />
                   </div>
                   <div className="col-md-6">
-                    <input type="text" name="email" placeholder="Write Your Email" className="form-control" />
+                    <input type="text" name="email" placeholder="Nhập email của bạn" className="form-control" />
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-md-12">
-                    <textarea className="form-control" placeholder="Write Your Message" style={{ height: '150px' }}></textarea>
+                    <textarea className="form-control" placeholder="Nhập lời nhắn của bạn" style={{ height: '150px' }}></textarea>
                     <button type="submit" name="submit"
-                      className="btn btn-primary btn-lg rounded-pill px-5 py-3 mt-4">Submit</button>
+                      className="btn btn-primary btn-lg rounded-pill px-5 py-3 mt-4">Gửi</button>
                   </div>
                 </div>
               </form>
@@ -91,4 +91,4 @@ const ContactPage = () => {
   );
 };
 
-export default ContactPage; 
+export default ContactPage;

@@ -142,7 +142,7 @@ const Header = () => {
                 
                   <li className="py-1">
                     <Link to="/blog" className="dropdown-item text-uppercase">
-                      Blog
+                      Tin tức
                     </Link>
                   </li>
                   <li className="py-1">
@@ -150,7 +150,7 @@ const Header = () => {
                       to="/blog-single"
                       className="dropdown-item text-uppercase"
                     >
-                      Blog-Single
+                      Chi tiết tin tức
                     </Link>
                   </li>
                   
@@ -160,7 +160,7 @@ const Header = () => {
                       to="/gallery"
                       className="dropdown-item text-uppercase"
                     >
-                      Gallery
+                      Thư viện ảnh
                     </Link>
                   </li>
                   <li className="py-1">
@@ -196,7 +196,7 @@ const Header = () => {
               <input
                 className="form-control border-0 ps-4 position-relative"
                 type="search"
-                placeholder="Search.."
+                placeholder="Tìm kiếm.."
                 aria-label="Search"
               />
             </form>

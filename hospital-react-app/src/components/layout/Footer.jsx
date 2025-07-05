@@ -15,7 +15,7 @@ const Footer = () => {
                   <svg className="location primary-color" width="25" height="25">
                     <use xlinkHref="#location"></use>
                   </svg>
-                  <span>123 Đường ABC, Quận XYZ, TP.HCM</span>
+                  <span>355 Đường 3/2 , phường 3, Quận 10</span>
                 </p>
                 <p>
                   <svg className="email primary-color" width="25" height="25">
