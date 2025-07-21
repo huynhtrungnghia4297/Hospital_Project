@@ -66,6 +66,7 @@ namespace Hospital_API.Services
         {
             Id = d.Id,
             ItemType = d.ItemType,
+            InvoiceId = d.InvoiceId,
             ItemId = d.ItemId,
             Description = d.Description,
             Quantity = d.Quantity,
