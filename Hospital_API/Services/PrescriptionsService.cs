@@ -25,10 +25,10 @@ namespace Hospital_API.Services
             return prescriptions == null ? null : MapToDTO(prescriptions);
         }
 
-        public async Task<List<PrescriptionsDTO>> GetByPatientId(int patientId)
+        public async Task<PrescriptionsDTO> GetByPatientId(int patientId)
         {
             var prescriptions = await _repository.GetByPatientId(patientId);
-            return prescriptions.Select(MapToDTO).ToList();
+            return prescriptions == null ? null : MapToDTO(prescriptions);
         }
 
         public async Task<PrescriptionsDTO> Create(PrescriptionsDTO dto)

@@ -6,8 +6,8 @@ namespace Hospital_API.Interfaces
     {
         Task<IEnumerable<Invoice>> GetAll();
         Task<Invoice> GetById(int id);
-        Task<IEnumerable<Invoice>> GetByPatientId(int patientId);
-        Task<IEnumerable<Invoice>> GetByAppointmentId(int appointmentId);
+        Task<Invoice> GetByPatientId(int patientId);
+        Task<Invoice> GetByAppointmentId(int appointmentId);
         Task<Invoice> Create(Invoice invoice);
         Task<bool> Update(Invoice invoice);
         Task<bool> Delete(int id);

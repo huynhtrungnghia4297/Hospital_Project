@@ -19,7 +19,7 @@ using Microsoft.OpenApi.Models;
 using System.Globalization;
 using System.Reflection;
 using AutoMapper;
-using Hospital_API.Repository;
+using Hospital_API.Repositories;
 
 // Set the culture to invariant
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;

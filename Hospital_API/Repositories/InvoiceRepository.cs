@@ -3,7 +3,7 @@ using Hospital_API.Interfaces;
 using Hospital_API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hospital_API.Repository
+namespace Hospital_API.Repositories
 {
     public class InvoiceRepository : IInvoiceRepository
     {
@@ -19,15 +19,17 @@ namespace Hospital_API.Repository
         public async Task<Invoice> GetById(int id) =>
             await _context.Invoices.Include(x => x.InvoiceDetails).Include(x => x.Payments).FirstOrDefaultAsync(x => x.Id == id);
 
-        public async Task<IEnumerable<Invoice>> GetByPatientId(int patientId) =>
-            await _context.Invoices.Include(x => x.InvoiceDetails).Include(x => x.Payments)
-            .Where(x => x.PatientId == patientId).ToListAsync();
+        public async Task<Invoice> GetByPatientId(int patientId) =>
+    await _context.Invoices
+        .Include(x => x.InvoiceDetails)
+        .Include(x => x.Payments)
+        .FirstOrDefaultAsync(x => x.PatientId == patientId);
 
-        public async Task<IEnumerable<Invoice>> GetByAppointmentId(int appointmentId) =>
-            await _context.Invoices.Include(x => x.InvoiceDetails).Include(x => x.Payments)
-            .Where(x => x.AppointmentId == appointmentId).ToListAsync();
-
-        public async Task<Invoice> Create(Invoice invoice)
+        public async Task<Invoice> GetByAppointmentId(int appointmentId) =>
+            await _context.Invoices
+                .Include(x => x.InvoiceDetails)
+                .Include(x => x.Payments)
+                .FirstOrDefaultAsync(x => x.AppointmentId == appointmentId); public async Task<Invoice> Create(Invoice invoice)
         {
             _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();

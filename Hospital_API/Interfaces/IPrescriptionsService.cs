@@ -6,7 +6,7 @@ namespace Hospital_API.Interfaces
     {
         Task<List<PrescriptionsDTO>> GetAll();
         Task<PrescriptionsDTO> GetById(int id);
-        Task<List<PrescriptionsDTO>> GetByPatientId(int patientId);
+        Task<PrescriptionsDTO> GetByPatientId(int patientId);
         Task<PrescriptionsDTO> Create(PrescriptionsDTO dto);
         Task<bool> Update(int id, PrescriptionsDTO dto);
         Task<bool> Delete(int id);

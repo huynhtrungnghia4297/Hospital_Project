@@ -24,16 +24,16 @@ namespace Hospital_API.Services
             return invoice == null ? null : MapToDTO(invoice);
         }
 
-        public async Task<IEnumerable<InvoiceDTO>> GetByPatientId(int patientId)
+        public async Task<InvoiceDTO> GetByPatientId(int patientId)
         {
-            var invoices = await _repository.GetByPatientId(patientId);
-            return invoices.Select(MapToDTO).ToList();
+            var invoice = await _repository.GetByPatientId(patientId);
+            return invoice == null ? null : MapToDTO(invoice);
         }
 
-        public async Task<IEnumerable<InvoiceDTO>> GetByAppointmentId(int appointmentId)
+        public async Task<InvoiceDTO> GetByAppointmentId(int appointmentId)
         {
-            var invoices = await _repository.GetByAppointmentId(appointmentId);
-            return invoices.Select(MapToDTO).ToList();
+            var invoice = await _repository.GetByAppointmentId(appointmentId);
+            return invoice == null ? null : MapToDTO(invoice);
         }
 
         public async Task<InvoiceDTO> Create(InvoiceCreateDTO dto)

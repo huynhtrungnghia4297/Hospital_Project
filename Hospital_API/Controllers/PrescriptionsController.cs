@@ -25,10 +25,10 @@ public class PrescriptionsController : ControllerBase
     }
 
     [HttpGet("by-patient/{patientId}")]
-    public async Task<ActionResult<List<PrescriptionsDTO>>> GetByPatientId(int patientId)
+    public async Task<ActionResult<PrescriptionsDTO>> GetByPatientId(int patientId)
     {
-        var records = await _service.GetByPatientId(patientId);
-        return !records.Any() ? NotFound() : Ok(records);
+        var record = await _service.GetByPatientId(patientId);
+        return record == null ? NotFound() : Ok(record);
     }
 
     [HttpPost]

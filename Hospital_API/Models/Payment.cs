@@ -1,4 +1,5 @@
-using Hospital_API.Models;
+namespace Hospital_API.Models
+{
 public class Payment
 {
     public int Id { get; set; }
@@ -9,4 +10,5 @@ public class Payment
     public string? TransactionCode { get; set; }
     public Invoice Invoice { get; set; } = null!;
 
+}
 }

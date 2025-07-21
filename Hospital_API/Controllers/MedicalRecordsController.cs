@@ -30,10 +30,10 @@ namespace Hospital_API.Controllers
         }
 
         [HttpGet("by-patient/{patientId}")]
-        public async Task<ActionResult<List<MedicalRecordsDTO>>> GetByPatientId(int patientId)
+        public async Task<ActionResult<MedicalRecordsDTO>> GetByPatientId(int patientId)
         {
-            var records = await _service.GetByPatientId(patientId);
-            return !records.Any() ? NotFound() : Ok(records);
+            var record = await _service.GetByPatientId(patientId);
+            return record == null ? NotFound() : Ok(record);
         }
 
         [HttpPost]

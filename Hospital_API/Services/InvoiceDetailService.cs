@@ -1,12 +1,14 @@
 using Hospital_API.DTOs;
 using Hospital_API.Interfaces;
 using Hospital_API.Models;
-
+using Hospital_API.Data;
+using Microsoft.EntityFrameworkCore;
 namespace Hospital_API.Services
 {
     public class InvoiceDetailService : IInvoiceDetailService
     {
         private readonly IInvoiceDetailRepository _repository;
+        private readonly HospitalDbContext _context;
         public InvoiceDetailService(IInvoiceDetailRepository repository)
         {
             _repository = repository;
@@ -61,6 +63,17 @@ namespace Hospital_API.Services
         }
 
         public async Task<bool> Delete(int id) => await _repository.Delete(id);
+        private async Task UpdateInvoiceTotal(int invoiceId)
+        {
+            var invoice = await _context.Invoices
+                .Include(i => i.InvoiceDetails)
+                .FirstOrDefaultAsync(i => i.Id == invoiceId);
+            if (invoice != null)
+            {
+                invoice.TotalAmount = invoice.InvoiceDetails.Sum(d => d.TotalPrice);
+                await _context.SaveChangesAsync();
+            }
+        }
 
         private InvoiceDetailDTO MapToDTO(InvoiceDetail d) => new InvoiceDetailDTO
         {

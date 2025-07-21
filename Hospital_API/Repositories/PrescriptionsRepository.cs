@@ -3,7 +3,7 @@ using Hospital_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Hospital_API.Data;
 
-namespace Hospital_API.Repository
+namespace Hospital_API.Repositories
 {
     public class PrescriptionsRepository : IPrescriptionsRepository
     {
@@ -25,11 +25,11 @@ namespace Hospital_API.Repository
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<List<Prescriptions>> GetByPatientId(int patientId)
+        public async Task<Prescriptions> GetByPatientId(int patientId)
         {
-            return await _context.Prescriptions.Include(p => p.PrescriptionDetails)
-                .Where(p => p.PatientID == patientId)
-                .ToListAsync();
+            return await _context.Prescriptions
+                .Include(p => p.PrescriptionDetails)
+                .FirstOrDefaultAsync(p => p.PatientID == patientId);
         }
 
         public async Task<Prescriptions> Create(Prescriptions prescriptions)

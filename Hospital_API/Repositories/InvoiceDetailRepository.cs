@@ -3,7 +3,7 @@ using Hospital_API.Interfaces;
 using Hospital_API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hospital_API.Repository
+namespace Hospital_API.Repositories
 {
     public class InvoiceDetailRepository : IInvoiceDetailRepository
     {
