@@ -1,51 +1,56 @@
-using Hospital_API.Models;
 using Hospital_API.Interfaces;
-using Hospital_API.Data;
+using Hospital_API.Models;
 using Microsoft.EntityFrameworkCore;
+using Hospital_API.Data;
 
-namespace Hospital_API.Repositories
+namespace Hospital_API.Repository
 {
     public class PrescriptionsRepository : IPrescriptionsRepository
     {
         private readonly HospitalDbContext _context;
+
         public PrescriptionsRepository(HospitalDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<Prescriptions>> GetAllAsync()
+        public async Task<List<Prescriptions>> GetAll()
         {
-            return await _context.Prescriptions.Include(p => p.MedicalRecord).ToListAsync();
+            return await _context.Prescriptions.Include(p => p.PrescriptionDetails).ToListAsync();
         }
 
-        public async Task<Prescriptions> GetByIdAsync(int id)
+        public async Task<Prescriptions> GetById(int id)
         {
-            return await _context.Prescriptions.Include(p => p.MedicalRecord).FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Prescriptions.Include(p => p.PrescriptionDetails)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<Prescriptions> AddAsync(Prescriptions prescription)
+        public async Task<List<Prescriptions>> GetByPatientId(int patientId)
         {
-            await _context.Prescriptions.AddAsync(prescription);
+            return await _context.Prescriptions.Include(p => p.PrescriptionDetails)
+                .Where(p => p.PatientID == patientId)
+                .ToListAsync();
+        }
+
+        public async Task<Prescriptions> Create(Prescriptions prescriptions)
+        {
+            _context.Prescriptions.Add(prescriptions);
             await _context.SaveChangesAsync();
-            return prescription;
+            return prescriptions;
         }
 
-        public async Task<Prescriptions> UpdateAsync(Prescriptions prescription)
+        public async Task<bool> Update(Prescriptions prescriptions)
         {
-            _context.Prescriptions.Update(prescription);
-            await _context.SaveChangesAsync();
-            return prescription;
+            _context.Prescriptions.Update(prescriptions);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<Prescriptions> DeleteAsync(int id)
+        public async Task<bool> Delete(int id)
         {
-            var prescription = await _context.Prescriptions.FindAsync(id);
-            if (prescription != null)
-            {
-                _context.Prescriptions.Remove(prescription);
-                await _context.SaveChangesAsync();
-            }
-            return prescription;
+            var prescriptions = await _context.Prescriptions.FindAsync(id);
+            if (prescriptions == null) return false;
+            _context.Prescriptions.Remove(prescriptions);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

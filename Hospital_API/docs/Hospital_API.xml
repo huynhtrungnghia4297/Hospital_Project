@@ -39,61 +39,6 @@
             Get available time slots for doctor
             </summary>
         </member>
-        <member name="M:Hospital_API.Controllers.InvoiceDetailController.GetAll">
-            <summary>
-            Lấy tất cả các dòng chi tiết hóa đơn
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoiceDetailController.GetById(System.Int32)">
-            <summary>
-            Lấy chi tiết hóa đơn theo ID
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoiceDetailController.GetByInvoiceId(System.Int32)">
-            <summary>
-            Lấy tất cả dòng chi tiết theo ID hóa đơn cha
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoiceDetailController.Create(Hospital_API.DTOs.InvoiceDetailCreateDTO)">
-            <summary>
-            Tạo mới dòng chi tiết hóa đơn
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoiceDetailController.Delete(System.Int32)">
-            <summary>
-            Xóa dòng chi tiết hóa đơn
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoicesController.GetAll">
-            <summary>
-            Lấy toàn bộ hóa đơn
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoicesController.GetById(System.Int32)">
-            <summary>
-            Lấy hóa đơn theo ID
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoicesController.GetByAppointmentId(System.Int32)">
-            <summary>
-            Lấy hóa đơn theo lịch hẹn
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoicesController.Create(Hospital_API.DTOs.InvoiceCreateDTO)">
-            <summary>
-            Tạo mới hóa đơn
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoicesController.Update(System.Int32,Hospital_API.DTOs.InvoiceUpdateDTO)">
-            <summary>
-            Cập nhật hóa đơn
-            </summary>
-        </member>
-        <member name="M:Hospital_API.Controllers.InvoicesController.Delete(System.Int32)">
-            <summary>
-            Xoá hóa đơn
-            </summary>
-        </member>
         <member name="M:Hospital_API.Controllers.RolePermissionController.AssignPermissions(Hospital_API.DTOs.AssignPermissionsDto)">
             <summary>
             Gán nhiều quyền cho 1 role
@@ -297,6 +242,42 @@
             <inheritdoc />
         </member>
         <member name="M:Hospital_API.Migrations.AddAddressToUser.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Hospital_API.Migrations.UpdateMedicalRecords">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.UpdateMedicalRecords.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.UpdateMedicalRecords.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.UpdateMedicalRecords.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Hospital_API.Migrations.UpdatedPrescriptions_NoCascade">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.UpdatedPrescriptions_NoCascade.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.UpdatedPrescriptions_NoCascade.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.UpdatedPrescriptions_NoCascade.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Hospital_API.Migrations.UpdateInvoiceAndInvoiceDetails">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.UpdateInvoiceAndInvoiceDetails.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.UpdateInvoiceAndInvoiceDetails.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.UpdateInvoiceAndInvoiceDetails.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

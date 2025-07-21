@@ -1,72 +1,93 @@
+using Hospital_API.DTOs;
 using Hospital_API.Interfaces;
 using Hospital_API.Models;
-using Hospital_API.DTOs;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Hospital_API.Services
 {
     public class PrescriptionsService : IPrescriptionsService
     {
-        private readonly IPrescriptionsRepository _repo;
-        public PrescriptionsService(IPrescriptionsRepository repo)
+        private readonly IPrescriptionsRepository _repository;
+
+        public PrescriptionsService(IPrescriptionsRepository repository)
         {
-            _repo = repo;
+            _repository = repository;
         }
 
-        public async Task<IEnumerable<PrescriptionsDTO>> GetAllAsync()
+        public async Task<List<PrescriptionsDTO>> GetAll()
         {
-            var prescriptions = await _repo.GetAllAsync();
-            return prescriptions.Select(MapToDTO);
+            var prescriptions = await _repository.GetAll();
+            return prescriptions.Select(MapToDTO).ToList();
         }
 
-        public async Task<PrescriptionsDTO> GetByIdAsync(int id)
+        public async Task<PrescriptionsDTO> GetById(int id)
         {
-            var prescription = await _repo.GetByIdAsync(id);
-            return prescription == null ? null : MapToDTO(prescription);
+            var prescriptions = await _repository.GetById(id);
+            return prescriptions == null ? null : MapToDTO(prescriptions);
         }
 
-        public async Task<PrescriptionsDTO> AddAsync(PrescriptionsDTO dto)
+        public async Task<List<PrescriptionsDTO>> GetByPatientId(int patientId)
         {
-            var prescription = new Prescriptions
+            var prescriptions = await _repository.GetByPatientId(patientId);
+            return prescriptions.Select(MapToDTO).ToList();
+        }
+
+        public async Task<PrescriptionsDTO> Create(PrescriptionsDTO dto)
+        {
+            var prescriptions = new Prescriptions
             {
+                PatientID = dto.PatientID,
                 MedicalRecordID = dto.MedicalRecordID,
                 PrescribedBy = dto.PrescribedBy,
-                CreatedAt = dto.CreatedAt
+                CreatedAt = dto.CreatedAt,
+                PrescriptionDetails = dto.PrescriptionDetails.Select(pd => new PrescriptionDetails
+                {
+                    MedicineID = pd.MedicineID,
+                    Dosage = pd.Dosage,
+                    Quantity = pd.Quantity,
+                    Instructions = pd.Instructions
+                }).ToList()
             };
-            var result = await _repo.AddAsync(prescription);
-            return MapToDTO(result);
+            var created = await _repository.Create(prescriptions);
+            return MapToDTO(created);
         }
 
-        public async Task<PrescriptionsDTO> UpdateAsync(PrescriptionsDTO dto)
+        public async Task<bool> Update(int id, PrescriptionsDTO dto)
         {
-            var prescription = new Prescriptions
+            var existing = await _repository.GetById(id);
+            if (existing == null) return false;
+
+            existing.PatientID = dto.PatientID;
+            existing.MedicalRecordID = dto.MedicalRecordID;
+            existing.PrescribedBy = dto.PrescribedBy;
+            existing.CreatedAt = dto.CreatedAt;
+            existing.PrescriptionDetails = dto.PrescriptionDetails.Select(pd => new PrescriptionDetails
             {
-                Id = dto.Id,
-                MedicalRecordID = dto.MedicalRecordID,
-                PrescribedBy = dto.PrescribedBy,
-                CreatedAt = dto.CreatedAt
-            };
-            var result = await _repo.UpdateAsync(prescription);
-            return MapToDTO(result);
+                MedicineID = pd.MedicineID,
+                Dosage = pd.Dosage,
+                Quantity = pd.Quantity,
+                Instructions = pd.Instructions
+            }).ToList();
+
+            return await _repository.Update(existing);
         }
 
-        public async Task<PrescriptionsDTO> DeleteAsync(int id)
-        {
-            var result = await _repo.DeleteAsync(id);
-            return result == null ? null : MapToDTO(result);
-        }
+        public async Task<bool> Delete(int id) => await _repository.Delete(id);
 
-        private PrescriptionsDTO MapToDTO(Prescriptions prescription)
+        private PrescriptionsDTO MapToDTO(Prescriptions p) => new PrescriptionsDTO
         {
-            return new PrescriptionsDTO
+            Id = p.Id,
+            PatientID = p.PatientID,
+            MedicalRecordID = p.MedicalRecordID,
+            PrescribedBy = p.PrescribedBy,
+            CreatedAt = p.CreatedAt,
+            PrescriptionDetails = p.PrescriptionDetails.Select(pd => new PrescriptionDetailsDTO
             {
-                Id = prescription.Id,
-                MedicalRecordID = prescription.MedicalRecordID,
-                PrescribedBy = prescription.PrescribedBy,
-                CreatedAt = prescription.CreatedAt
-            };
-        }
+                Id = pd.Id,
+                MedicineID = pd.MedicineID,
+                Dosage = pd.Dosage,
+                Quantity = pd.Quantity,
+                Instructions = pd.Instructions
+            }).ToList()
+        };
     }
 }

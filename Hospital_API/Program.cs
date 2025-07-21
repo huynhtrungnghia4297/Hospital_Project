@@ -19,6 +19,7 @@ using Microsoft.OpenApi.Models;
 using System.Globalization;
 using System.Reflection;
 using AutoMapper;
+using Hospital_API.Repository;
 
 // Set the culture to invariant
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
@@ -209,6 +210,10 @@ builder.Services.AddScoped<ILabTestRepo, LabTestRepo>();
 builder.Services.AddScoped<ILabTestService, LabTestService>();
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
 builder.Services.AddScoped<IBranchService, BranchService>();
+builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
+builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+builder.Services.AddScoped<IPrescriptionsRepository, PrescriptionsRepository>();
+builder.Services.AddScoped<IPrescriptionsService, PrescriptionsService>();
 
 builder.Services.AddScoped<ITestRequestRepository, TestRequestRepository>();
 builder.Services.AddScoped<ITestRequestService, TestRequestService>();

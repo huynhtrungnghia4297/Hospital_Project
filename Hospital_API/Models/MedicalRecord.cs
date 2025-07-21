@@ -9,9 +9,12 @@ namespace Hospital_API.Models
         public int Id { get; set; }
 
         public int AppointmentID { get; set; }
-
         [ForeignKey("AppointmentID")]
         public Appointment Appointment { get; set; }
+
+        public int PatientID { get; set; } 
+        [ForeignKey("PatientID")]
+        public Patient Patient { get; set; }
 
         public string Diagnosis { get; set; }
         public string Conclusion { get; set; }

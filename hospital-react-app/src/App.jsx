@@ -28,7 +28,6 @@ import AppointmentManagementPage from './pages/admin/AppointmentManagementPage';
 import MedicineManagementPage from './pages/admin/MedicineManagementPage';
 import DoctorManagementPage from './pages/admin/DoctorManagementPage';
 import DoctorScheduleManagementPage from './pages/admin/DoctorScheduleManagementPage';
-import PatientManagementPage from './pages/admin/PatientManagementPage';
 import MedicalRecordManagementPage from './pages/admin/MedicalRecordManagementPage';
 import WaitingListManagementPage from './pages/admin/WaitingListManagementPage';
 import MedicalServiceManagementPage from './pages/admin/MedicalServiceManagementPage';
@@ -37,6 +36,9 @@ import TestRequestManagementPage from './pages/admin/TestRequestManagementPage';
 import TestResultManagementPage from './pages/admin/TestResultManagementPage';
 import PrescriptionPaymentPage from './pages/admin/PrescriptionPaymentPage';
 import LabTestPaymentPage from './pages/admin/LabTestPaymentPage';
+import MyPrescriptionsPage from "./pages/MyPrescriptionsPage";
+import PatientInvoicePage from "./pages/PatientInvoicePage";
+
 import ServicePaymentManagementPage from './pages/admin/ServicePaymentManagementPage';
 import BlogManagementPage from './pages/admin/BlogManagementPage';
 import { AppProvider } from './contexts/AppContext';
@@ -75,6 +77,8 @@ function App() {
           <Route path="pricing" element={<PricingPage />} />
           <Route path="gallery" element={<GalleryPage />} />
           <Route path="user-info" element={<UserInfoPage />} />
+          <Route path="/my-prescriptions" element={<MyPrescriptionsPage />} />
+          <Route path="my-invoices" element={<PatientInvoicePage />} />
         </Route>
 
         {/* Admin routes */}
@@ -92,7 +96,6 @@ function App() {
           <Route path="medicines" element={<MedicineManagementPage />} />
           <Route path="doctors" element={<DoctorManagementPage />} />
           <Route path="doctor-schedules" element={<DoctorScheduleManagementPage />} />
-          <Route path="patients" element={<PatientManagementPage />} />
           <Route path="medical-records" element={<MedicalRecordManagementPage />} />
           <Route path="waiting-list" element={<WaitingListManagementPage />} />
           <Route path="medical-services" element={<MedicalServiceManagementPage />} />

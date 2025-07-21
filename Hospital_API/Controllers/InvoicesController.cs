@@ -4,105 +4,51 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital_API.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class InvoicesController : ControllerBase
+    [ApiController]
+    public class InvoiceController : ControllerBase
     {
         private readonly IInvoiceService _service;
-
-        public InvoicesController(IInvoiceService service)
+        public InvoiceController(IInvoiceService service)
         {
             _service = service;
         }
 
-        /// <summary>
-        /// Lấy toàn bộ hóa đơn
-        /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<InvoiceDTO>), 200)]
-        public async Task<ActionResult<IEnumerable<InvoiceDTO>>> GetAll()
-        {
-            var result = await _service.GetAllAsync();
-            return Ok(result);
-        }
+        public async Task<IActionResult> GetAll() => Ok(await _service.GetAll());
 
-        /// <summary>
-        /// Lấy hóa đơn theo ID
-        /// </summary>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(InvoiceDTO), 200)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<InvoiceDTO>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var result = await _service.GetByIdAsync(id);
-            if (result == null)
-                return NotFound(new { message = $"Invoice with ID {id} not found." });
-
-            return Ok(result);
+            var result = await _service.GetById(id);
+            return result == null ? NotFound() : Ok(result);
         }
 
-        /// <summary>
-        /// Lấy hóa đơn theo lịch hẹn
-        /// </summary>
-        [HttpGet("by-appointment/{appointmentId}")]
-        [ProducesResponseType(typeof(InvoiceDTO), 200)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<InvoiceDTO>> GetByAppointmentId(int appointmentId)
-        {
-            var result = await _service.GetByAppointmentIdAsync(appointmentId);
-            if (result == null)
-                return NotFound(new { message = $"No invoice found for appointment ID {appointmentId}." });
+        [HttpGet("patient/{patientId}")]
+        public async Task<IActionResult> GetByPatientId(int patientId) => Ok(await _service.GetByPatientId(patientId));
 
-            return Ok(result);
-        }
+        [HttpGet("appointment/{appointmentId}")]
+        public async Task<IActionResult> GetByAppointmentId(int appointmentId) => Ok(await _service.GetByAppointmentId(appointmentId));
 
-        /// <summary>
-        /// Tạo mới hóa đơn
-        /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(InvoiceDTO), 201)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<InvoiceDTO>> Create([FromBody] InvoiceCreateDTO dto)
+        public async Task<IActionResult> Create([FromBody] InvoiceCreateDTO dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            var created = await _service.Create(dto);
+            return Ok(created);
         }
 
-        /// <summary>
-        /// Cập nhật hóa đơn
-        /// </summary>
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(InvoiceDTO), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<InvoiceDTO>> Update(int id, [FromBody] InvoiceUpdateDTO dto)
+        public async Task<IActionResult> Update(int id, [FromBody] InvoiceCreateDTO dto)
         {
-            if (id != dto.Id)
-                return BadRequest(new { message = "ID mismatch." });
-
-            var result = await _service.UpdateAsync(dto);
-            if (result == null)
-                return NotFound(new { message = $"Invoice with ID {id} not found." });
-
-            return Ok(result);
+            var result = await _service.Update(id, dto);
+            return result ? Ok() : NotFound();
         }
 
-        /// <summary>
-        /// Xoá hóa đơn
-        /// </summary>
         [HttpDelete("{id}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
         public async Task<IActionResult> Delete(int id)
         {
-            var success = await _service.DeleteAsync(id);
-            if (!success)
-                return NotFound(new { message = $"Invoice with ID {id} not found." });
-
-            return NoContent();
+            var result = await _service.Delete(id);
+            return result ? Ok() : NotFound();
         }
     }
 }

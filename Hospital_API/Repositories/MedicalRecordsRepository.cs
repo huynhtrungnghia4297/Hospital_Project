@@ -1,51 +1,55 @@
-using Hospital_API.Models;
 using Hospital_API.Interfaces;
-using Hospital_API.Data;
+using Hospital_API.Models;
 using Microsoft.EntityFrameworkCore;
+using Hospital_API.Data;
 
-namespace Hospital_API.Repositories
+namespace Hospital_API.Repository
 {
-    public class MedicalRecordsRepository : IMedicalRecordsRepository
+    public class MedicalRecordRepository : IMedicalRecordRepository
     {
         private readonly HospitalDbContext _context;
-        public MedicalRecordsRepository(HospitalDbContext context)
+
+        public MedicalRecordRepository(HospitalDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<MedicalRecord>> GetAllAsync()
+        public async Task<List<MedicalRecord>> GetAll()
         {
-            return await _context.MedicalRecords.Include(m => m.Appointment).ToListAsync();
+            return await _context.MedicalRecords.ToListAsync();
         }
 
-        public async Task<MedicalRecord> GetByIdAsync(int id)
+        public async Task<MedicalRecord> GetById(int id)
         {
-            return await _context.MedicalRecords.Include(m => m.Appointment).FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.MedicalRecords.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<MedicalRecord> AddAsync(MedicalRecord record)
+        public async Task<List<MedicalRecord>> GetByPatientId(int patientId)
         {
-            await _context.MedicalRecords.AddAsync(record);
+            return await _context.MedicalRecords
+                .Where(x => x.PatientID == patientId)
+                .ToListAsync();
+        }
+
+        public async Task<MedicalRecord> Create(MedicalRecord record)
+        {
+            _context.MedicalRecords.Add(record);
             await _context.SaveChangesAsync();
             return record;
         }
 
-        public async Task<MedicalRecord> UpdateAsync(MedicalRecord record)
+        public async Task<bool> Update(MedicalRecord record)
         {
             _context.MedicalRecords.Update(record);
-            await _context.SaveChangesAsync();
-            return record;
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<MedicalRecord> DeleteAsync(int id)
+        public async Task<bool> Delete(int id)
         {
             var record = await _context.MedicalRecords.FindAsync(id);
-            if (record != null)
-            {
-                _context.MedicalRecords.Remove(record);
-                await _context.SaveChangesAsync();
-            }
-            return record;
+            if (record == null) return false;
+            _context.MedicalRecords.Remove(record);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

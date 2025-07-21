@@ -4,12 +4,12 @@ namespace Hospital_API.Interfaces
 {
     public interface IInvoiceRepository
     {
-        Task<IEnumerable<Invoice>> GetAllAsync();
-        Task<Invoice?> GetByIdAsync(int id);
-        Task<Invoice?> GetByAppointmentIdAsync(int appointmentId);
-        Task AddAsync(Invoice invoice);
-        Task UpdateAsync(Invoice invoice);
-        Task DeleteAsync(Invoice invoice);
+        Task<IEnumerable<Invoice>> GetAll();
+        Task<Invoice> GetById(int id);
+        Task<IEnumerable<Invoice>> GetByPatientId(int patientId);
+        Task<IEnumerable<Invoice>> GetByAppointmentId(int appointmentId);
+        Task<Invoice> Create(Invoice invoice);
+        Task<bool> Update(Invoice invoice);
+        Task<bool> Delete(int id);
     }
-
 }

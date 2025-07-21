@@ -1,115 +1,76 @@
-using Hospital_API.Data;
 using Hospital_API.DTOs;
 using Hospital_API.Interfaces;
 using Hospital_API.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Hospital_API.Services
 {
     public class InvoiceDetailService : IInvoiceDetailService
-{
-    private readonly IInvoiceDetailRepository _repo;
-    private readonly HospitalDbContext _context;
-
-    public InvoiceDetailService(IInvoiceDetailRepository repo,HospitalDbContext context )
+    {
+        private readonly IInvoiceDetailRepository _repository;
+        public InvoiceDetailService(IInvoiceDetailRepository repository)
         {
-            _repo = repo;
-            _context = context;
-
-    }
-
-    public async Task<IEnumerable<InvoiceDetailDTO>> GetAllAsync()
-    {
-        var data = await _repo.GetAllAsync();
-        return data.Select(x => ToDTO(x));
-    }
-
-    public async Task<IEnumerable<InvoiceDetailDTO>> GetByInvoiceIdAsync(int invoiceId)
-    {
-        var data = await _repo.GetByInvoiceIdAsync(invoiceId);
-        return data.Select(x => ToDTO(x));
-    }
-
-    public async Task<InvoiceDetailDTO?> GetByIdAsync(int id)
-    {
-        var entity = await _repo.GetByIdAsync(id);
-        return entity == null ? null : ToDTO(entity);
-    }
-
-    public async Task<InvoiceDetailDTO> CreateAsync(InvoiceDetailCreateDTO dto)
-    {
-        var entity = new InvoiceDetail
-        {
-            InvoiceId = dto.InvoiceId,
-            ItemType = dto.ItemType,
-            ItemId = dto.ItemId,
-            Description = dto.Description,
-            Quantity = dto.Quantity,
-            UnitPrice = dto.UnitPrice,
-            TotalPrice = dto.Quantity * dto.UnitPrice
-        };
-
-        await _repo.AddAsync(entity);
-        await UpdateInvoiceTotal(dto.InvoiceId);
-
-        return ToDTO(entity);
-    }
-
-    public async Task<bool> DeleteAsync(int id)
-    {
-        var entity = await _repo.GetByIdAsync(id);
-        if (entity == null) return false;
-
-        await _repo.DeleteAsync(entity);
-        await UpdateInvoiceTotal(entity.InvoiceId);
-
-        return true;
-    }
-    public async Task<InvoiceDetailDTO?> UpdateAsync(int id, InvoiceDetailCreateDTO dto)
-        {
-            var entity = await _repo.GetByIdAsync(id);
-            if (entity == null) return null;
-
-            entity.ItemType = dto.ItemType;
-            entity.ItemId = dto.ItemId;
-            entity.Description = dto.Description;
-            entity.Quantity = dto.Quantity;
-            entity.UnitPrice = dto.UnitPrice;
-            entity.TotalPrice = dto.Quantity * dto.UnitPrice;
-
-            await _repo.UpdateAsync(entity);
-            await UpdateInvoiceTotal(entity.InvoiceId); // tự động cập nhật lại tổng tiền
-
-            return ToDTO(entity);
+            _repository = repository;
         }
 
-    private async Task UpdateInvoiceTotal(int invoiceId)
+        public async Task<IEnumerable<InvoiceDetailDTO>> GetAll()
         {
-            var invoice = await _context.Invoices
-                .Include(i => i.InvoiceDetails)
-                .FirstOrDefaultAsync(i => i.Id == invoiceId);
+            var details = await _repository.GetAll();
+            return details.Select(MapToDTO).ToList();
+        }
 
-            if (invoice != null)
+        public async Task<InvoiceDetailDTO> GetById(int id)
+        {
+            var detail = await _repository.GetById(id);
+            return detail == null ? null : MapToDTO(detail);
+        }
+
+        public async Task<IEnumerable<InvoiceDetailDTO>> GetByInvoiceId(int invoiceId)
+        {
+            var details = await _repository.GetByInvoiceId(invoiceId);
+            return details.Select(MapToDTO).ToList();
+        }
+
+        public async Task<InvoiceDetailDTO> Create(InvoiceDetailCreateDTO dto)
+        {
+            var detail = new InvoiceDetail
             {
-                invoice.TotalAmount = invoice.InvoiceDetails.Sum(d => d.TotalPrice);
-                await _context.SaveChangesAsync();
-
-            }
+                InvoiceId = dto.InvoiceId,
+                ItemType = dto.ItemType,
+                ItemId = dto.ItemId,
+                Description = dto.Description,
+                Quantity = dto.Quantity,
+                UnitPrice = dto.UnitPrice,
+                TotalPrice = dto.Quantity * dto.UnitPrice
+            };
+            var created = await _repository.Create(detail);
+            return MapToDTO(created);
         }
-    private InvoiceDetailDTO ToDTO(InvoiceDetail entity)
-    {
-        return new InvoiceDetailDTO
+
+        public async Task<bool> Update(int id, InvoiceDetailCreateDTO dto)
         {
-            Id = entity.Id,
-            InvoiceId = entity.InvoiceId,
-            ItemType = entity.ItemType,
-            ItemId = entity.ItemId,
-            Description = entity.Description,
-            Quantity = entity.Quantity,
-            UnitPrice = entity.UnitPrice,
-            TotalPrice = entity.TotalPrice
+            var detail = await _repository.GetById(id);
+            if (detail == null) return false;
+            detail.InvoiceId = dto.InvoiceId;
+            detail.ItemType = dto.ItemType;
+            detail.ItemId = dto.ItemId;
+            detail.Description = dto.Description;
+            detail.Quantity = dto.Quantity;
+            detail.UnitPrice = dto.UnitPrice;
+            detail.TotalPrice = dto.Quantity * dto.UnitPrice;
+            return await _repository.Update(detail);
+        }
+
+        public async Task<bool> Delete(int id) => await _repository.Delete(id);
+
+        private InvoiceDetailDTO MapToDTO(InvoiceDetail d) => new InvoiceDetailDTO
+        {
+            Id = d.Id,
+            ItemType = d.ItemType,
+            ItemId = d.ItemId,
+            Description = d.Description,
+            Quantity = d.Quantity,
+            UnitPrice = d.UnitPrice,
+            TotalPrice = d.TotalPrice
         };
     }
-}
-
 }

@@ -83,7 +83,11 @@ namespace Hospital_API.Data
                 .HasOne(rp => rp.Permission)
                 .WithMany(p => p.RolePermissions)
                 .HasForeignKey(rp => rp.PermissionId);
-
+            modelBuilder.Entity<Prescriptions>()
+                .HasOne(p => p.Patient)
+                .WithMany()
+                .HasForeignKey(p => p.PatientID)
+                .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.User)
                 .WithOne(u => u.Patient)

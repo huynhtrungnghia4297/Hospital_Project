@@ -1,15 +1,14 @@
 using Hospital_API.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Hospital_API.Interfaces
 {
     public interface IPrescriptionsRepository
     {
-        Task<IEnumerable<Prescriptions>> GetAllAsync();
-        Task<Prescriptions> GetByIdAsync(int id);
-        Task<Prescriptions> AddAsync(Prescriptions prescription);
-        Task<Prescriptions> UpdateAsync(Prescriptions prescription);
-        Task<Prescriptions> DeleteAsync(int id);
+        Task<List<Prescriptions>> GetAll();
+        Task<Prescriptions> GetById(int id);
+        Task<List<Prescriptions>> GetByPatientId(int patientId);
+        Task<Prescriptions> Create(Prescriptions prescriptions);
+        Task<bool> Update(Prescriptions prescriptions);
+        Task<bool> Delete(int id);
     }
 }

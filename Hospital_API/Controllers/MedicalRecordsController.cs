@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-using Hospital_API.Interfaces;
 using Hospital_API.DTOs;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Hospital_API.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital_API.Controllers
 {
@@ -10,48 +8,53 @@ namespace Hospital_API.Controllers
     [Route("api/[controller]")]
     public class MedicalRecordsController : ControllerBase
     {
-        private readonly IMedicalRecordsService _service;
-        public MedicalRecordsController(IMedicalRecordsService service)
+        private readonly IMedicalRecordService _service;
+
+        public MedicalRecordsController(IMedicalRecordService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MedicalRecordsDTO>>> GetAll()
+        public async Task<ActionResult<List<MedicalRecordsDTO>>> GetAll()
         {
-            var records = await _service.GetAllAsync();
+            var records = await _service.GetAll();
             return Ok(records);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<MedicalRecordsDTO>> GetById(int id)
         {
-            var record = await _service.GetByIdAsync(id);
-            if (record == null) return NotFound();
-            return Ok(record);
+            var records = await _service.GetById(id);
+            return records == null ? NotFound() : Ok(records);
+        }
+
+        [HttpGet("by-patient/{patientId}")]
+        public async Task<ActionResult<List<MedicalRecordsDTO>>> GetByPatientId(int patientId)
+        {
+            var records = await _service.GetByPatientId(patientId);
+            return !records.Any() ? NotFound() : Ok(records);
         }
 
         [HttpPost]
-        public async Task<ActionResult<MedicalRecordsDTO>> Create([FromBody] MedicalRecordsDTO dto)
+        public async Task<ActionResult<MedicalRecordsDTO>> Create(MedicalRecordsDTO records)
         {
-            var created = await _service.AddAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            var createdRecords = await _service.Create(records);
+            return CreatedAtAction(nameof(GetById), new { id = createdRecords.Id }, createdRecords);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<MedicalRecordsDTO>> Update(int id, [FromBody] MedicalRecordsDTO dto)
+        public async Task<IActionResult> Update(int id, MedicalRecordsDTO records)
         {
-            dto.Id = id;
-            var updated = await _service.UpdateAsync(dto);
-            return Ok(updated);
+            var success = await _service.Update(id, records);
+            return success ? NoContent() : NotFound();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<MedicalRecordsDTO>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _service.DeleteAsync(id);
-            if (deleted == null) return NotFound();
-            return Ok(deleted);
+            var success = await _service.Delete(id);
+            return success ? NoContent() : NotFound();
         }
     }
 }

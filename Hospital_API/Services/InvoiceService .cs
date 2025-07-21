@@ -1,102 +1,101 @@
-using Hospital_API.Data;
 using Hospital_API.DTOs;
 using Hospital_API.Interfaces;
 using Hospital_API.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Hospital_API.Services
 {
     public class InvoiceService : IInvoiceService
     {
-        private readonly IInvoiceRepository _repo;
-        private readonly HospitalDbContext _context;
-
-
-        public InvoiceService(IInvoiceRepository repo,HospitalDbContext context)
+        private readonly IInvoiceRepository _repository;
+        public InvoiceService(IInvoiceRepository repository)
         {
-            _repo = repo;
-            _context = context;
-
+            _repository = repository;
         }
 
-        public async Task<IEnumerable<InvoiceDTO>> GetAllAsync()
+        public async Task<IEnumerable<InvoiceDTO>> GetAll()
         {
-            var entities = await _repo.GetAllAsync();
-            return entities.Select(e => MapToDTO(e));
+            var invoices = await _repository.GetAll();
+            return invoices.Select(MapToDTO).ToList();
         }
 
-        public async Task<InvoiceDTO?> GetByIdAsync(int id)
+        public async Task<InvoiceDTO> GetById(int id)
         {
-            var entity = await _repo.GetByIdAsync(id);
-            return entity == null ? null : MapToDTO(entity);
+            var invoice = await _repository.GetById(id);
+            return invoice == null ? null : MapToDTO(invoice);
         }
 
-        public async Task<InvoiceDTO?> GetByAppointmentIdAsync(int appointmentId)
+        public async Task<IEnumerable<InvoiceDTO>> GetByPatientId(int patientId)
         {
-            var entity = await _repo.GetByAppointmentIdAsync(appointmentId);
-            return entity == null ? null : MapToDTO(entity);
+            var invoices = await _repository.GetByPatientId(patientId);
+            return invoices.Select(MapToDTO).ToList();
         }
 
-        public async Task<InvoiceDTO> CreateAsync(InvoiceCreateDTO dto)
+        public async Task<IEnumerable<InvoiceDTO>> GetByAppointmentId(int appointmentId)
         {
-            // Lấy thông tin Appointment kèm theo PatientId
-            var appointment = await _context.Appointments
-                .AsNoTracking()
-                .FirstOrDefaultAsync(a => a.Id == dto.AppointmentId);
+            var invoices = await _repository.GetByAppointmentId(appointmentId);
+            return invoices.Select(MapToDTO).ToList();
+        }
 
-            if (appointment == null)
-                throw new Exception("Appointment not found");
-
-
+        public async Task<InvoiceDTO> Create(InvoiceCreateDTO dto)
+        {
             var invoice = new Invoice
             {
                 AppointmentId = dto.AppointmentId,
-                PatientId = appointment.PatientId, 
+                PatientId = dto.PatientId,
+                IssuedDate = DateTime.Now,
                 TotalAmount = dto.TotalAmount,
-                Status = string.IsNullOrEmpty(dto.Status) ? "Unpaid" : dto.Status,
+                Status = dto.Status,
                 Note = dto.Note,
-                IssuedDate = DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.Now
             };
-
-            await _repo.AddAsync(invoice);
-            return MapToDTO(invoice);
+            var created = await _repository.Create(invoice);
+            return MapToDTO(created);
         }
 
-        public async Task<InvoiceDTO?> UpdateAsync(InvoiceUpdateDTO dto)
+        public async Task<bool> Update(int id, InvoiceCreateDTO dto)
         {
-            var entity = await _repo.GetByIdAsync(dto.Id);
-            if (entity == null) return null;
+            var invoice = await _repository.GetById(id);
+            if (invoice == null) return false;
 
-            entity.TotalAmount = dto.TotalAmount;
-            entity.Status = dto.Status;
-            entity.Note = dto.Notes;
-
-            await _repo.UpdateAsync(entity);
-            return MapToDTO(entity);
+            invoice.AppointmentId = dto.AppointmentId;
+            invoice.PatientId = dto.PatientId;
+            invoice.TotalAmount = dto.TotalAmount;
+            invoice.Status = dto.Status;
+            invoice.Note = dto.Note;
+            return await _repository.Update(invoice);
         }
 
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var entity = await _repo.GetByIdAsync(id);
-            if (entity == null) return false;
+        public async Task<bool> Delete(int id) => await _repository.Delete(id);
 
-            await _repo.DeleteAsync(entity);
-            return true;
-        }
-
-        private InvoiceDTO MapToDTO(Invoice entity)
+        private InvoiceDTO MapToDTO(Invoice i) => new InvoiceDTO
         {
-            return new InvoiceDTO
+            Id = i.Id,
+            AppointmentId = i.AppointmentId,
+            PatientId = i.PatientId,
+            IssuedDate = i.IssuedDate,
+            TotalAmount = i.TotalAmount,
+            Status = i.Status,
+            Note = i.Note,
+            CreatedAt = i.CreatedAt,
+            InvoiceDetails = i.InvoiceDetails.Select(d => new InvoiceDetailDTO
             {
-                Id = entity.Id,
-                AppointmentId = entity.AppointmentId,
-                TotalAmount = entity.TotalAmount,
-                Status = entity.Status,
-                Note = entity.Note,
-                CreatedAt = entity.CreatedAt
-            };
-        }
+                Id = d.Id,
+                ItemType = d.ItemType,
+                ItemId = d.ItemId,
+                Description = d.Description,
+                Quantity = d.Quantity,
+                UnitPrice = d.UnitPrice,
+                TotalPrice = d.TotalPrice
+            }).ToList(),
+            Payments = i.Payments.Select(p => new PaymentDTO
+            {
+                Id = p.Id,
+                InvoiceId = p.InvoiceId,
+                Amount = p.Amount,
+                PaymentDate = p.PaymentDate,
+                PaymentMethod = p.PaymentMethod,
+                TransactionCode = p.TransactionCode
+            }).ToList()
+        };
     }
-
 }

@@ -3,50 +3,49 @@ using Hospital_API.Interfaces;
 using Hospital_API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hospital_API.Repositories
+namespace Hospital_API.Repository
 {
     public class InvoiceRepository : IInvoiceRepository
     {
         private readonly HospitalDbContext _context;
-
         public InvoiceRepository(HospitalDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<Invoice>> GetAllAsync()
-        {
-            return await _context.Invoices.Include(i => i.Appointment).ToListAsync();
-        }
+        public async Task<IEnumerable<Invoice>> GetAll() =>
+            await _context.Invoices.Include(x => x.InvoiceDetails).Include(x => x.Payments).ToListAsync();
 
-        public async Task<Invoice?> GetByIdAsync(int id)
-        {
-            return await _context.Invoices.Include(i => i.Appointment)
-                                          .FirstOrDefaultAsync(i => i.Id == id);
-        }
+        public async Task<Invoice> GetById(int id) =>
+            await _context.Invoices.Include(x => x.InvoiceDetails).Include(x => x.Payments).FirstOrDefaultAsync(x => x.Id == id);
 
-        public async Task<Invoice?> GetByAppointmentIdAsync(int appointmentId)
-        {
-            return await _context.Invoices.FirstOrDefaultAsync(i => i.AppointmentId == appointmentId);
-        }
+        public async Task<IEnumerable<Invoice>> GetByPatientId(int patientId) =>
+            await _context.Invoices.Include(x => x.InvoiceDetails).Include(x => x.Payments)
+            .Where(x => x.PatientId == patientId).ToListAsync();
 
-        public async Task AddAsync(Invoice invoice)
+        public async Task<IEnumerable<Invoice>> GetByAppointmentId(int appointmentId) =>
+            await _context.Invoices.Include(x => x.InvoiceDetails).Include(x => x.Payments)
+            .Where(x => x.AppointmentId == appointmentId).ToListAsync();
+
+        public async Task<Invoice> Create(Invoice invoice)
         {
             _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();
+            return invoice;
         }
 
-        public async Task UpdateAsync(Invoice invoice)
+        public async Task<bool> Update(Invoice invoice)
         {
             _context.Invoices.Update(invoice);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task DeleteAsync(Invoice invoice)
+        public async Task<bool> Delete(int id)
         {
+            var invoice = await _context.Invoices.FindAsync(id);
+            if (invoice == null) return false;
             _context.Invoices.Remove(invoice);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
     }
-
 }

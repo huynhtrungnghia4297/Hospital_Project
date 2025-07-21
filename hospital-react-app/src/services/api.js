@@ -84,12 +84,16 @@ export const getMedicalRecordById = (id) => api.get(`/medicalrecords/${id}`);
 export const createMedicalRecord = (data) => api.post('/medicalrecords', data);
 export const updateMedicalRecord = (id, data) => api.put(`/medicalrecords/${id}`, data);
 export const deleteMedicalRecord = (id) => api.delete(`/medicalrecords/${id}`);
-
+// Prescriptions APIs
+export const getPrescriptionsByPatientId = (patientId) => api.get(`/prescriptions/by-patient/${patientId}`);
+export const getPrescriptionById = (id) => api.get(`/prescriptions/${id}`);
 // Blog APIs
 export const getAllBlogs = async () => {
   const response = await api.get('/blog');  // This endpoint now returns only published blogs
   return response.data;
 };
+// Invoice APIs
+export const getInvoicesByPatientId = (patientId) => api.get(`/invoice/patient/${patientId}`);
 
 export const getAllBlogsAdmin = async () => {
   const response = await api.get('/blog/admin');  // New admin endpoint that returns all blogs

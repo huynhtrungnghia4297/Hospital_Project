@@ -3,14 +3,12 @@ using Hospital_API.Models;
 namespace Hospital_API.Interfaces
 {
     public interface IInvoiceDetailRepository
-{
-    Task<IEnumerable<InvoiceDetail>> GetAllAsync();
-    Task<InvoiceDetail?> GetByIdAsync(int id);
-    Task<IEnumerable<InvoiceDetail>> GetByInvoiceIdAsync(int invoiceId);
-
-    Task AddAsync(InvoiceDetail entity);
-    Task UpdateAsync(InvoiceDetail entity);
-    Task DeleteAsync(InvoiceDetail entity);
-}
-
+    {
+        Task<IEnumerable<InvoiceDetail>> GetAll();
+        Task<InvoiceDetail> GetById(int id);
+        Task<IEnumerable<InvoiceDetail>> GetByInvoiceId(int invoiceId);
+        Task<InvoiceDetail> Create(InvoiceDetail detail);
+        Task<bool> Update(InvoiceDetail detail);
+        Task<bool> Delete(int id);
+    }
 }
