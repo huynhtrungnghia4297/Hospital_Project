@@ -5182,11 +5182,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\LENOVO\\Downloads\\Project mới\\Hospital_Project\\Hospital_API\\Hospital_API.csproj",
+      "projectUniqueName": "C:\\Users\\LENOVO\\Downloads\\Hospital_Project\\Hospital_API\\Hospital_API.csproj",
       "projectName": "Hospital_API",
-      "projectPath": "C:\\Users\\LENOVO\\Downloads\\Project mới\\Hospital_Project\\Hospital_API\\Hospital_API.csproj",
+      "projectPath": "C:\\Users\\LENOVO\\Downloads\\Hospital_Project\\Hospital_API\\Hospital_API.csproj",
       "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\LENOVO\\Downloads\\Project mới\\Hospital_Project\\Hospital_API\\obj\\",
+      "outputPath": "C:\\Users\\LENOVO\\Downloads\\Hospital_Project\\Hospital_API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\DevExpress 22.2\\Components\\Offline Packages",

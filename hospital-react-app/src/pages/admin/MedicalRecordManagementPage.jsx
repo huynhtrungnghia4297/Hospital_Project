@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, Select, Space, message, Card, Row, Col, Descriptions } from 'antd';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import { 
+  getAllMedicalRecords, 
+  getAllAppointments, 
+  createMedicalRecord, 
+  updateMedicalRecord, 
+  deleteMedicalRecord 
+} from '../../services/api'; 
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -18,12 +24,13 @@ const MedicalRecordManagementPage = () => {
   useEffect(() => {
     fetchRecords();
     fetchAppointments();
+    // eslint-disable-next-line
   }, []);
 
   const fetchRecords = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/MedicalRecords');
+      const response = await getAllMedicalRecords();
       const data = response.data;
       setRecords(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -37,7 +44,7 @@ const MedicalRecordManagementPage = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('/api/Appointments');
+      const response = await getAllAppointments();
       const data = response.data;
       // Chỉ lấy các cuộc hẹn đã xác nhận và chưa có bệnh án
       const confirmedAppointments = Array.isArray(data) ? data.filter(appointment => 
@@ -78,10 +85,10 @@ const MedicalRecordManagementPage = () => {
 
   const handleDeleteRecord = async (id) => {
     try {
-      await axios.delete(`/api/MedicalRecords/${id}`);
+      await deleteMedicalRecord(id);
       message.success('Medical record deleted successfully');
       fetchRecords();
-      fetchAppointments(); // Refresh appointments to show the deleted record's appointment
+      fetchAppointments();
     } catch (error) {
       console.error('Error deleting medical record:', error);
       message.error('Failed to delete medical record');
@@ -98,16 +105,16 @@ const MedicalRecordManagementPage = () => {
       };
 
       if (selectedRecord) {
-        await axios.put(`/api/MedicalRecords/${selectedRecord.id}`, recordData);
+        await updateMedicalRecord(selectedRecord.id, recordData);
         message.success('Medical record updated successfully');
       } else {
-        await axios.post('/api/MedicalRecords', recordData);
+        await createMedicalRecord(recordData);
         message.success('Medical record created successfully');
       }
 
       setModalVisible(false);
       fetchRecords();
-      fetchAppointments(); // Refresh appointments to hide the one we just created a record for
+      fetchAppointments();
     } catch (error) {
       console.error('Error saving medical record:', error);
       message.error('Failed to save medical record');
@@ -283,4 +290,4 @@ const MedicalRecordManagementPage = () => {
   );
 };
 
-export default MedicalRecordManagementPage; 
+export default MedicalRecordManagementPage;

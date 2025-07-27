@@ -1,46 +1,52 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Container, Row, Col, Card, Button, Table, Badge, Alert } from 'react-bootstrap';
 import { FaListOl, FaCheck, FaUserSlash } from 'react-icons/fa';
-
-// Mock Data
-const initialWaitingList = [
-  { id: 1, appointmentId: 201, patientName: 'David Lee', doctorName: 'Dr. John Doe', queueNumber: 1, status: 'Waiting' },
-  { id: 2, appointmentId: 202, patientName: 'Laura Chen', doctorName: 'Dr. Jane Smith', queueNumber: 1, status: 'Waiting' },
-  { id: 3, appointmentId: 203, patientName: 'Chris Green', doctorName: 'Dr. John Doe', queueNumber: 2, status: 'Waiting' },
-  { id: 4, appointmentId: 204, patientName: 'Brenda Martinez', doctorName: 'Dr. Emily White', queueNumber: 1, status: 'Waiting' },
-  { id: 5, appointmentId: 205, patientName: 'Tom Harris', doctorName: 'Dr. John Doe', queueNumber: 3, status: 'Waiting' },
-];
+import { getAllWaitingList, updateWaitingStatus, removeFromWaitingList } from '../../services/api'; // Thêm các hàm API phù hợp
 
 function WaitingListManagementPage() {
-  const [waitingList, setWaitingList] = useState(initialWaitingList);
+  const [waitingList, setWaitingList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleCallNext = (doctorId) => {
-    setWaitingList(prevList => {
-      const newList = [...prevList];
-      const doctorQueue = newList
-        .filter(p => p.doctorName === doctorId && p.status === 'Waiting')
-        .sort((a, b) => a.queueNumber - b.queueNumber);
-
-      if (doctorQueue.length > 0) {
-        // Find the patient currently being served for this doctor and mark as Done
-        const currentlyServingPatient = newList.find(p => p.doctorName === doctorId && p.status === 'Serving');
-        if(currentlyServingPatient) {
-            currentlyServingPatient.status = 'Done';
-        }
-
-        // Mark the next patient as 'Serving'
-        const nextPatient = newList.find(p => p.id === doctorQueue[0].id);
-        if (nextPatient) {
-          nextPatient.status = 'Serving';
-        }
+  useEffect(() => {
+    const fetchWaitingList = async () => {
+      try {
+        const res = await getAllWaitingList(); // Gọi API thật
+        setWaitingList(res.data); // Điều chỉnh nếu API trả về khác
+      } catch (error) {
+        setWaitingList([]);
+      } finally {
+        setLoading(false);
       }
-      return newList;
-    });
+    };
+    fetchWaitingList();
+  }, []);
+
+  const handleCallNext = async (doctorName) => {
+    // Tìm bệnh nhân tiếp theo và cập nhật trạng thái qua API nếu cần
+    const doctorQueue = waitingList
+      .filter(p => p.doctorName === doctorName && p.status === 'Waiting')
+      .sort((a, b) => a.queueNumber - b.queueNumber);
+
+    if (doctorQueue.length > 0) {
+      // Cập nhật trạng thái bệnh nhân đang phục vụ thành 'Done'
+      const currentlyServingPatient = waitingList.find(p => p.doctorName === doctorName && p.status === 'Serving');
+      if (currentlyServingPatient) {
+        await updateWaitingStatus(currentlyServingPatient.id, 'Done');
+      }
+      // Đánh dấu bệnh nhân tiếp theo là 'Serving'
+      await updateWaitingStatus(doctorQueue[0].id, 'Serving');
+      // Reload danh sách
+      const res = await getAllWaitingList();
+      setWaitingList(res.data);
+    }
   };
 
-  const handleRemove = (patientId) => {
-     if (window.confirm('Are you sure you want to remove this patient from the waiting list?')) {
-        setWaitingList(prevList => prevList.map(p => p.id === patientId ? {...p, status: 'Cancelled'} : p));
+  const handleRemove = async (patientId) => {
+    if (window.confirm('Are you sure you want to remove this patient from the waiting list?')) {
+      await removeFromWaitingList(patientId);
+      // Reload danh sách
+      const res = await getAllWaitingList();
+      setWaitingList(res.data);
     }
   };
 
@@ -80,7 +86,8 @@ function WaitingListManagementPage() {
         </Col>
       </Row>
 
-      {Object.keys(groupedByDoctor).length === 0 && <Alert variant='info'>The waiting list is currently empty.</Alert>}
+      {loading && <Alert variant='info'>Loading...</Alert>}
+      {!loading && Object.keys(groupedByDoctor).length === 0 && <Alert variant='info'>The waiting list is currently empty.</Alert>}
 
       <Row>
         {Object.entries(groupedByDoctor).map(([doctorName, patients]) => (
@@ -128,4 +135,4 @@ function WaitingListManagementPage() {
   );
 }
 
-export default WaitingListManagementPage; 
+export default WaitingListManagementPage;

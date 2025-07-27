@@ -72,11 +72,11 @@ export const updatePatient = (id, data) => api.put(`/patient/${id}`, data);
 export const deletePatient = (id) => api.delete(`/patient/${id}`);
 
 // Appointment APIs
-export const getAllAppointments = () => api.get('/appointment');
-export const getAppointmentById = (id) => api.get(`/appointment/${id}`);
-export const createAppointment = (data) => api.post('/appointment', data);
-export const updateAppointment = (id, data) => api.put(`/appointment/${id}`, data);
-export const deleteAppointment = (id) => api.delete(`/appointment/${id}`);
+export const getAllAppointments = () => api.get('/Appointment');
+export const getAppointmentById = (id) => api.get(`/Appointment/${id}`);
+export const createAppointment = (data) => api.post('/Appointment', data);
+export const updateAppointment = (id, data) => api.put(`/Appointment/${id}`, data);
+export const deleteAppointment = (id) => api.delete(`/Appointment/${id}`);
 
 // Medical Record APIs
 export const getAllMedicalRecords = () => api.get('/medicalrecords');
@@ -84,6 +84,11 @@ export const getMedicalRecordById = (id) => api.get(`/medicalrecords/${id}`);
 export const createMedicalRecord = (data) => api.post('/medicalrecords', data);
 export const updateMedicalRecord = (id, data) => api.put(`/medicalrecords/${id}`, data);
 export const deleteMedicalRecord = (id) => api.delete(`/medicalrecords/${id}`);
+
+// Waiting List APIs
+export const getAllWaitingList = () => api.get('/WaitingList');
+export const updateWaitingStatus = (id, status) => api.put(`/WaitingList/${id}`, { status });
+export const removeFromWaitingList = (id) => api.delete(`/WaitingList/${id}`);
 
 // Invoice
 export const createInvoiced = (data) => api.post('/Invoice/createddetails', data);
@@ -130,4 +135,4 @@ export const deleteBlog = async (id) => {
   return response.data;
 };
 
-export default api; 
+export default api;
