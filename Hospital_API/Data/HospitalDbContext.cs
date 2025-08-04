@@ -134,6 +134,11 @@ namespace Hospital_API.Data
                     .HasForeignKey(p => p.InvoiceId)
                     .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Prescriptions>()
+    .HasOne(p => p.Patient)
+    .WithMany()
+    .HasForeignKey(p => p.PatientID)
+    .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Invoice>()
             .HasMany(i => i.InvoiceDetails)
@@ -170,9 +175,9 @@ namespace Hospital_API.Data
         .WithMany(x => x.Items)
         .HasForeignKey(x => x.PackageId)
         .OnDelete(DeleteBehavior.Cascade);
-            
-             modelBuilder.Entity<MedicalPackageItemDb>()
-            .HasKey(x => x.Id);
+
+            modelBuilder.Entity<MedicalPackageItemDb>()
+           .HasKey(x => x.Id);
 
             // Configure relationships
             modelBuilder.Entity<Prescriptions>()

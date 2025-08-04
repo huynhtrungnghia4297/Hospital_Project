@@ -8,6 +8,7 @@ namespace Hospital_API.Interfaces
     {
         Task<IEnumerable<PrescriptionsDTO>> GetAllAsync();
         Task<PrescriptionsDTO> GetByIdAsync(int id);
+        Task<IEnumerable<PrescriptionsDTO>> GetByPatientIdAsync(int patientId);
         Task<PrescriptionsDTO> AddAsync(PrescriptionsDTO dto);
         Task<PrescriptionsDTO> UpdateAsync(PrescriptionsDTO dto);
         Task<PrescriptionsDTO> DeleteAsync(int id);

@@ -33,18 +33,24 @@ namespace Hospital_API.Services
             return prescription == null ? null : MapToDTO(prescription);
         }
 
+        public async Task<IEnumerable<PrescriptionsDTO>> GetByPatientIdAsync(int patientId)
+        {
+            var prescriptions = await _repo.GetPrescriptionsByPatientIdAsync(patientId);
+            return prescriptions.Select(MapToDTO);
+        }
+
         public async Task<PrescriptionsDTO> AddAsync(PrescriptionsDTO dto)
         {
             var prescription = new Prescriptions
             {
                 MedicalRecordID = dto.MedicalRecordID,
+                PatientID = dto.PatientID, 
                 PrescribedBy = dto.PrescribedBy,
                 CreatedAt = DateTime.UtcNow
             };
 
             var result = await _repo.AddAsync(prescription);
 
-            // Add prescription details
             if (dto.Details != null && dto.Details.Any())
             {
                 foreach (var detail in dto.Details)
@@ -61,7 +67,6 @@ namespace Hospital_API.Services
                 }
             }
 
-            // Get the complete prescription with details
             return await GetByIdAsync(result.Id);
         }
 
@@ -71,16 +76,15 @@ namespace Hospital_API.Services
             {
                 Id = dto.Id,
                 MedicalRecordID = dto.MedicalRecordID,
+                PatientID = dto.PatientID, 
                 PrescribedBy = dto.PrescribedBy,
                 CreatedAt = dto.CreatedAt
             };
 
             var result = await _repo.UpdateAsync(prescription);
 
-            // Get existing details
             var existingDetails = await _detailsRepo.GetByPrescriptionIdAsync(dto.Id);
 
-            // Delete removed details
             foreach (var existingDetail in existingDetails)
             {
                 if (!dto.Details.Any(d => d.Id == existingDetail.Id))
@@ -89,12 +93,10 @@ namespace Hospital_API.Services
                 }
             }
 
-            // Update or add details
             foreach (var detail in dto.Details)
             {
                 if (detail.Id > 0)
                 {
-                    // Update existing detail
                     var prescriptionDetail = new PrescriptionDetails
                     {
                         Id = detail.Id,
@@ -108,7 +110,6 @@ namespace Hospital_API.Services
                 }
                 else
                 {
-                    // Add new detail
                     var prescriptionDetail = new PrescriptionDetails
                     {
                         PrescriptionID = dto.Id,
@@ -121,22 +122,17 @@ namespace Hospital_API.Services
                 }
             }
 
-            // Get the complete updated prescription with details
             return await GetByIdAsync(dto.Id);
         }
 
         public async Task<PrescriptionsDTO> DeleteAsync(int id)
         {
-            // Get existing details
             var existingDetails = await _detailsRepo.GetByPrescriptionIdAsync(id);
-
-            // Delete all details first
             foreach (var detail in existingDetails)
             {
                 await _detailsRepo.DeleteAsync(detail.Id);
             }
 
-            // Then delete the prescription
             var result = await _repo.DeleteAsync(id);
             return result == null ? null : MapToDTO(result);
         }
@@ -149,6 +145,7 @@ namespace Hospital_API.Services
             {
                 Id = prescription.Id,
                 MedicalRecordID = prescription.MedicalRecordID,
+                PatientID = prescription.PatientID, 
                 PrescribedBy = prescription.PrescribedBy,
                 CreatedAt = prescription.CreatedAt,
                 MedicalRecord = prescription.MedicalRecord == null ? null : new MedicalRecordsDTO
