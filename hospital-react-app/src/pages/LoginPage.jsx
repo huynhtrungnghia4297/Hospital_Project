@@ -43,9 +43,14 @@ const LoginPage = () => {
         roles: response.data.token.roles,
         avatar: response.data.token.avatar || ""
       };
-      
+
       localStorage.setItem('authData', JSON.stringify(authData));
       localStorage.setItem('authToken', authData.token); // Giữ lại cho các API calls
+
+      // Nếu là bệnh nhân thì lưu thêm patientId
+      if (authData.roles && authData.roles.includes('Patient') && response.data.token.patientId) {
+        localStorage.setItem('patientId', response.data.token.patientId);
+      }
       
       // Lưu thời gian hết hạn token (3 tiếng)
       setTokenExpiration();

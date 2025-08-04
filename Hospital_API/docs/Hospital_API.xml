@@ -323,5 +323,17 @@
         <member name="M:Hospital_API.Migrations.AddPrescriptionDetails.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:Hospital_API.Migrations.AddPatientIdToPrescriptions">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.AddPatientIdToPrescriptions.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.AddPatientIdToPrescriptions.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Hospital_API.Migrations.AddPatientIdToPrescriptions.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

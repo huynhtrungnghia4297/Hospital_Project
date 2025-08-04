@@ -46,7 +46,7 @@ import SupplierManagementPage from './pages/admin/SupplierManagementPage';
 import { AppProvider } from './contexts/AppContext';
 import AdminRoute from './components/auth/AdminRoute';
 import NotFoundPage from './pages/NotFoundPage';
-
+import PrescriptionPage from './pages/PrescriptionPage';
 function App() {
   useEffect(() => {
     // Khởi tạo kiểm tra token expiration định kỳ
@@ -91,6 +91,7 @@ function App() {
           <Route path="pricing" element={<PricingPage />} />
           <Route path="gallery" element={<GalleryPage />} />
           <Route path="user-info" element={<UserInfoPage />} />
+          <Route path="prescriptions" element={<PrescriptionPage />} />
         </Route>
 
         {/* Admin routes */}

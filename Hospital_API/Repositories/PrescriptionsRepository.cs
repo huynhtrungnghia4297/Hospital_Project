@@ -57,5 +57,16 @@ namespace Hospital_API.Repositories
             }
             return prescription;
         }
+
+        public async Task<IEnumerable<Prescriptions>> GetPrescriptionsByPatientIdAsync(int patientId)
+        {
+            return await _context.Prescriptions
+                .Where(p => p.PatientID == patientId)
+                .Include(p => p.MedicalRecord)
+                    .ThenInclude(m => m.Appointment)
+                .Include(p => p.Details)
+                    .ThenInclude(d => d.Medicine)
+                .ToListAsync();
+        }
     }
 }
