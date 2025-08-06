@@ -46,28 +46,28 @@ namespace Hospital_API.Services
                 Note = a.Note
             });
         }
-        public async Task<List<AppointmentDTO>> GetAppointmentsByPatientIdAsync(int patientId)
-            {
-                var appointments = await _appointmentRepo.GetByPatientIdAsync(patientId);
-                return appointments.Select(a => new AppointmentDTO
-                {
-                    Id = a.Id,
-                    PatientId = a.PatientId,
-                    DoctorId = a.DoctorId,
-                    BranchId = a.BranchId,
-                    AppointmentNo = a.AppointmentNo,
-                    PatientName =  a.Patient?.User?.FullName ?? "Unknown",
-                    DoctorName = a.Doctor?.User?.FullName ?? "Unknown",
-                    BranchName = a.Branch?.Name ?? "Unknown",
-                    Specialization = a.Doctor?.Specialization ?? "Unknown",
-                    AppointmentDate = a.AppointmentDate,
-                    StartTime = a.StartTime,
-                    EndTime = a.EndTime,
-                    Status = a.Status,
-                    Note = a.Note
-                }).ToList();
-            }
 
+        public async Task<List<AppointmentDTO>> GetAppointmentsByPatientIdAsync(int patientId)
+        {
+            var appointments = await _appointmentRepo.GetByPatientIdAsync(patientId);
+            return appointments.Select(a => new AppointmentDTO
+            {
+                Id = a.Id,
+                PatientId = a.PatientId,
+                DoctorId = a.DoctorId,
+                BranchId = a.BranchId,
+                AppointmentNo = a.AppointmentNo,
+                PatientName =  a.Patient?.User?.FullName ?? "Unknown",
+                DoctorName = a.Doctor?.User?.FullName ?? "Unknown",
+                BranchName = a.Branch?.Name ?? "Unknown",
+                Specialization = a.Doctor?.Specialization ?? "Unknown",
+                AppointmentDate = a.AppointmentDate,
+                StartTime = a.StartTime,
+                EndTime = a.EndTime,
+                Status = a.Status,
+                Note = a.Note
+            }).ToList();
+        }
 
         public async Task<AppointmentDTO?> GetByIdAsync(int id)
         {
@@ -98,20 +98,6 @@ namespace Hospital_API.Services
             if (dto.StartTime >= dto.EndTime)
                 throw new InvalidOperationException("Giờ bắt đầu phải nhỏ hơn giờ kết thúc.");
 
-            // // 2. Kiểm tra trùng giờ
-            // var conflict = await _appointmentRepo.FindAsync(a =>
-            //     a.DoctorId == dto.DoctorId &&
-            //     a.AppointmentDate == dto.AppointmentDate.Date &&
-            //     a.Status != "Cancelled" && (
-            //         (dto.StartTime >= a.StartTime && dto.StartTime < a.EndTime) ||
-            //         (dto.EndTime > a.StartTime && dto.EndTime <= a.EndTime) ||
-            //         (dto.StartTime <= a.StartTime && dto.EndTime >= a.EndTime)
-            //     )
-            // );
-
-            // if (conflict.Any())
-            //     throw new InvalidOperationException("Thời gian đã bị trùng với lịch hẹn khác của bác sĩ.");
-
             // 3. Tạo entity
             var appointment = new Appointment
             {
@@ -122,39 +108,36 @@ namespace Hospital_API.Services
                 AppointmentDate = dto.AppointmentDate.Date,
                 StartTime = dto.StartTime,
                 EndTime = dto.EndTime,
-                Status = "Scheduled",
+                Status = "Pending", // Mặc định là Pending
                 Note = dto.Note
             };
             await _appointmentRepo.AddAsync(appointment);
-
 
             var appointmentDto = await GetByIdAsync(appointment.Id);
             if (appointmentDto == null) throw new Exception("Tạo lịch hẹn thất bại.");
 
             var user = await __userRepo.GetByIdAsync(userId);
-                if (user == null) throw new Exception("Không tìm thấy người dùng");
+            if (user == null) throw new Exception("Không tìm thấy người dùng");
 
             var templatePath = Path.Combine(_env.ContentRootPath, "Templates", "BookingNoti.html");
-                        var html = await File.ReadAllTextAsync(templatePath);
+            var html = await File.ReadAllTextAsync(templatePath);
 
-                        html = html.Replace("{{FullName}}", user.FullName)
-                        .Replace("{{Username}}", user.Username)
-                        .Replace("{{Email}}", user.Email)
-                        .Replace("{{Phone}}", user.Phone)
-                        .Replace("{{AppointmentDate}}", appointmentDto.AppointmentDate.ToString("dd/MM/yyyy"))
-                        .Replace("{{AppointmentTime}}", $"{appointmentDto.StartTime:hh\\:mm} - {appointmentDto.EndTime:hh\\:mm}")
-                        .Replace("{{DoctorName}}", appointmentDto.DoctorName ?? "N/A")
-                        .Replace("{{BranchName}}", appointmentDto.BranchName ?? "N/A");
+            html = html.Replace("{{FullName}}", user.FullName)
+                .Replace("{{Username}}", user.Username)
+                .Replace("{{Email}}", user.Email)
+                .Replace("{{Phone}}", user.Phone)
+                .Replace("{{AppointmentDate}}", appointmentDto.AppointmentDate.ToString("dd/MM/yyyy"))
+                .Replace("{{AppointmentTime}}", $"{appointmentDto.StartTime:hh\\:mm} - {appointmentDto.EndTime:hh\\:mm}")
+                .Replace("{{DoctorName}}", appointmentDto.DoctorName ?? "N/A")
+                .Replace("{{BranchName}}", appointmentDto.BranchName ?? "N/A");
 
-                        var emailDto = new EmailDTO
-                        {
-                            To = user.Email,
-                            Subject = "Thông tin lịch hẹn khám bệnh - Medical Care Support",
-                            Body = html
-                        };
-                        await _emailService.SendEmailAsync(emailDto);
-
-
+            var emailDto = new EmailDTO
+            {
+                To = user.Email,
+                Subject = "Thông tin lịch hẹn khám bệnh - Medical Care Support",
+                Body = html
+            };
+            await _emailService.SendEmailAsync(emailDto);
 
             return await GetByIdAsync(appointment.Id) ?? throw new Exception("Tạo lịch hẹn thất bại.");
         }
@@ -185,12 +168,20 @@ namespace Hospital_API.Services
             return true;
         }
 
-     
+        public async Task<bool> CompleteAsync(int id)
+        {
+            var a = await _appointmentRepo.GetByIdAsync(id);
+            if (a == null) return false;
+
+            a.Status = "Completed";
+            await _appointmentRepo.UpdateAsync(a);
+            return true;
+        }
+
         public async Task<IEnumerable<AppointmentDTO>> GetByDoctorAndDateAsync(int doctorId, DateTime date)
         {
             var appointments = await _appointmentRepo.GetByDoctorAndDateAsync(doctorId, date);
 
-            // Map Appointment -> AppointmentDTO
             return appointments.Select(a => new AppointmentDTO
             {
                 Id = a.Id,
@@ -206,7 +197,6 @@ namespace Hospital_API.Services
             });
         }
 
-        // Tính các khung giờ trống theo bác sĩ và ngày
         public async Task<IEnumerable<TimeSpan>> GetAvailableTimeSlotsAsync(int doctorId, DateTime date)
         {
             var appointments = await _appointmentRepo.GetByDoctorAndDateAsync(doctorId, date);
@@ -224,10 +214,34 @@ namespace Hospital_API.Services
 
             // Lọc những slot đã bị đặt rồi
             var bookedSlots = appointments.Select(a => a.StartTime).ToHashSet();
-
             var availableSlots = slots.Where(s => !bookedSlots.Contains(s));
 
             return availableSlots;
+        }
+
+        public async Task<(bool isCompleted, string message)> CheckAndUpdatePaymentStatusAsync(int id)
+        {
+            var appointment = await _context.Appointments
+                .Include(a => a.Invoice)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (appointment == null)
+                return (false, "Không tìm thấy lịch hẹn.");
+
+            if (appointment.Status != "Confirmed")
+                return (false, "Lịch hẹn chưa được xác nhận.");
+
+            if (appointment.Invoice == null)
+                return (false, "Chưa có hóa đơn cho lịch hẹn này.");
+
+            if (appointment.Invoice.Status != "Paid")
+                return (false, "Hóa đơn chưa được thanh toán.");
+
+            // Nếu mọi điều kiện đều thỏa mãn, cập nhật trạng thái thành Completed
+            appointment.Status = "Completed";
+            await _context.SaveChangesAsync();
+
+            return (true, "Lịch hẹn đã được hoàn thành.");
         }
     }
 }

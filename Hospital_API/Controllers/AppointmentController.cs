@@ -39,6 +39,7 @@ namespace Hospital_API.Controllers
 
             return Ok(appointment);
         }
+
         [HttpGet("by-patient/{patientId}")]
         public async Task<IActionResult> GetByPatientId(int patientId)
         {
@@ -53,15 +54,12 @@ namespace Hospital_API.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] AppointmentCreateDTO dto)
         {
-
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Account Admin không thể book lịch khám." });
-
 
             try
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
                 var result = await _service.CreateAsync(dto, userId);
                 return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
             }
@@ -89,10 +87,22 @@ namespace Hospital_API.Controllers
         }
 
         /// <summary>
+        /// Complete an appointment
+        /// </summary>
+        [HttpPut("{id}/complete")]
+        public async Task<IActionResult> Complete(int id)
+        {
+            var success = await _service.CompleteAsync(id);
+            if (!success)
+                return NotFound(new { message = $"Appointment with ID {id} not found." });
+
+            return Ok(new { message = "Appointment completed successfully." });
+        }
+
+        /// <summary>
         /// Cancel an appointment
         /// </summary>
         [HttpPut("cancel/{id}")]
-
         public async Task<IActionResult> Cancel(int id)
         {
             var success = await _service.CancelAsync(id);
@@ -120,6 +130,23 @@ namespace Hospital_API.Controllers
         {
             var slots = await _service.GetAvailableTimeSlotsAsync(doctorId, date);
             return Ok(slots);
+        }
+
+        /// <summary>
+        /// Check and update appointment status based on payment status
+        /// </summary>
+        [HttpGet("{id}/check-payment")]
+        public async Task<IActionResult> CheckPaymentStatus(int id)
+        {
+            try
+            {
+                var (isCompleted, message) = await _service.CheckAndUpdatePaymentStatusAsync(id);
+                return Ok(new { isCompleted, message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", detail = ex.Message });
+            }
         }
     }
 }
