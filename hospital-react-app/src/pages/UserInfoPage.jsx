@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Nav, Tab, Form, Button, Alert } from 'react-
 import { useSearchParams } from 'react-router-dom';
 import Avatar from '../components/common/Avatar';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-import api, { API_BASE_URL, getInvoicesByPatientId } from '../services/api';
+import api, { API_BASE_URL, getInvoicesByPatientId, getAppointmentsByPatientId } from '../services/api';
 import { toast } from 'react-toastify';
 import { FaCalendarCheck, FaClock, FaPrescription, FaFileInvoiceDollar, FaKey, FaInfoCircle, FaCapsules } from 'react-icons/fa';
 
@@ -33,14 +33,21 @@ const UserInfoPage = () => {
     const fetchAllData = async () => {
       try {
         setLoading(true);
+        
+        // Lấy thông tin user
+        const userResponse = await api.get(`/User/${authData.userId}`);
+        
+        // Lấy patientId từ API Patient
+        const patientResponse = await api.get(`/Patient/user/${authData.userId}`);
+        const patientId = patientResponse.data.id;
+        
+        // Lấy các dữ liệu khác
         const [
-          userResponse,
           appointmentsResponse,
           waitingResponse,
           prescriptionsResponse,
         ] = await Promise.all([
-          api.get(`/User/${authData.userId}`),
-          api.get(`/Appointment/by-patient/${authData.userId}`),
+          api.get(`/Appointment/by-patient/${patientId}`),
           api.get('/WaitingList'),
           api.get('/Prescriptions'),
         ]);
@@ -61,7 +68,7 @@ const UserInfoPage = () => {
         }
 
         setUserData(userResponse.data);
-        setAppointments(appointmentsResponse.data);
+        setAppointments(appointmentsResponse.data || []);
         setWaitingList(waitingResponse.data.filter(item => item.patientId === authData.userId));
         setPrescriptions(prescriptionsResponse.data);
         setInvoices(invoicesData);
