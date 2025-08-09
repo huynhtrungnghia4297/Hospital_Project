@@ -74,6 +74,7 @@ export const deletePatient = (id) => api.delete(`/patient/${id}`);
 // Appointment APIs
 export const getAllAppointments = () => api.get('/appointment');
 export const getAppointmentById = (id) => api.get(`/appointment/${id}`);
+export const getAppointmentsByPatientId = (patientId) => api.get(`/appointment/by-patient/${patientId}`);
 export const createAppointment = (data) => api.post('/appointment', data);
 export const updateAppointment = (id, data) => api.put(`/appointment/${id}`, data);
 export const deleteAppointment = (id) => api.delete(`/appointment/${id}`);
