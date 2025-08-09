@@ -11,7 +11,7 @@ import {
   Pagination,
   Badge,
 } from "react-bootstrap";
-import { FaPlus, FaEdit, FaTrash, FaUserMd } from "react-icons/fa";
+import { FaEdit, FaTrash, FaUserMd } from "react-icons/fa";
 import Avatar from "../../components/common/Avatar";
 import axios from "axios";
 import { API_BASE_URL } from '../../services/api';
@@ -23,7 +23,7 @@ function DoctorManagementPage() {
   const [doctors, setDoctors] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentDoctor, setCurrentDoctor] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 10;
@@ -31,7 +31,6 @@ function DoctorManagementPage() {
   // API URLs
   const API_URL_GET = `${API_BASE_URL}/Doctor`;
   const API_URL_UPDATE = `${API_BASE_URL}/Doctor/edit`;
-  const API_URL_CREATE = `${API_BASE_URL}/Doctor`;
   const API_URL_DELETE = `${API_BASE_URL}/Doctor/delete`;
 
   const fetchDoctors = async () => {
@@ -54,48 +53,30 @@ function DoctorManagementPage() {
   const handleCloseModal = () => {
     setShowModal(false);
     setCurrentDoctor(null);
-    setIsEditing(false);
+
   };
 
-  const handleShowModal = async (doctor = null) => {
+  const handleShowModal = async (doctor) => {
     await checkTokenAndProceed(async () => {
       const role = getCurrentUserRole();
-      if (doctor) {
-        if (role?.trim() !== "Admin") {
-          alert("Chỉ Admin mới có quyền chỉnh sửa thông tin bác sĩ.");
-          return;
-        }
-        setCurrentDoctor({
-          id: doctor.id,
-          userId: doctor.userId,
-          fullName: doctor.fullName || "",
-          username: doctor.username || "",
-          email: doctor.email || "",
-          phone: doctor.phone || "",
-          dateOfBirth: doctor.dateOfBirth?.split("T")[0] || "",
-          gender: doctor.gender || "Male",
-          specialization: doctor.specialization || "",
-          degree: doctor.degree || "",
-          yearOfExperience: doctor.yearOfExperience || 0,
-          status: doctor.status || "Active",
-        });
-        setIsEditing(true);
-      } else {
-        setCurrentDoctor({
-          fullName: "",
-          username: "",
-          password: "",
-          email: "",
-          phone: "",
-          gender: "Male",
-          dateOfBirth: "",
-          specialization: "",
-          degree: "",
-          yearOfExperience: 0,
-          status: "Active",
-        });
-        setIsEditing(false);
+      if (role?.trim() !== "Admin") {
+        alert("Chỉ Admin mới có quyền chỉnh sửa thông tin bác sĩ.");
+        return;
       }
+      setCurrentDoctor({
+        id: doctor.id,
+        userId: doctor.userId,
+        fullName: doctor.fullName || "",
+        username: doctor.username || "",
+        email: doctor.email || "",
+        phone: doctor.phone || "",
+        dateOfBirth: doctor.dateOfBirth?.split("T")[0] || "",
+        gender: doctor.gender || "Male",
+        specialization: doctor.specialization || "",
+        degree: doctor.degree || "",
+        yearOfExperience: doctor.yearOfExperience || 0,
+        status: doctor.status || "Active",
+      });
       setShowModal(true);
     });
   };
@@ -104,20 +85,15 @@ function DoctorManagementPage() {
     await checkTokenAndProceed(async () => {
       try {
         setIsLoading(true);
-        if (isEditing) {
-          const { password, ...doctorToUpdate } = currentDoctor;
-          await axios.put(
-            `${API_URL_UPDATE}/${doctorToUpdate.id}`,
-            {
-              ...doctorToUpdate,
-              password: password || undefined,
-            }
-          );
-          alert("Cập nhật thông tin bác sĩ thành công!");
-        } else {
-          await axios.post(API_URL_CREATE, currentDoctor);
-          alert("Thêm bác sĩ mới thành công!");
-        }
+        const { password, ...doctorToUpdate } = currentDoctor;
+        await axios.put(
+          `${API_URL_UPDATE}/${doctorToUpdate.id}`,
+          {
+            ...doctorToUpdate,
+            password: password || undefined,
+          }
+        );
+        alert("Cập nhật thông tin bác sĩ thành công!");
         await fetchDoctors();
         handleCloseModal();
       } catch (error) {
@@ -186,20 +162,10 @@ function DoctorManagementPage() {
             <FaUserMd className="me-2" /> Quản Lý Danh Mục Bác Sĩ
           </h2>
         </Col>
-        <Col xs="auto">
-          <Button 
-            variant="primary" 
-            onClick={() => handleShowModal()}
-            disabled={isLoading}
-          >
-            <FaPlus className="me-2" /> Thêm Bác Sĩ
-          </Button>
-        </Col>
       </Row>
 
       <Card className="admin-card">
         <Card.Header className="d-flex justify-content-between align-items-center">
-
           <h5 className="mb-0">Danh Sách Bác Sĩ</h5>
         </Card.Header>
         <Card.Body>
@@ -297,7 +263,7 @@ function DoctorManagementPage() {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            {isEditing ? "Chỉnh sửa thông tin Bác Sĩ" : "Thêm Bác Sĩ mới"}
+            Chỉnh sửa thông tin Bác Sĩ
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -323,23 +289,10 @@ function DoctorManagementPage() {
                     name="username"
                     value={currentDoctor?.username || ""}
                     onChange={handleChange}
-                    disabled={isEditing}
+                    disabled
                     required
                   />
                 </Form.Group>
-
-                {!isEditing && (
-                  <Form.Group className="mb-3">
-                    <Form.Label>Mật khẩu</Form.Label>
-                    <Form.Control
-                      type="password"
-                      name="password"
-                      value={currentDoctor?.password || ""}
-                      onChange={handleChange}
-                      required
-                    />
-                  </Form.Group>
-                )}
 
                 <Form.Group className="mb-3">
                   <Form.Label>Email</Form.Label>
@@ -447,14 +400,7 @@ function DoctorManagementPage() {
             Hủy
           </Button>
           <Button variant="primary" onClick={handleSave} disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Đang xử lý...
-              </>
-            ) : (
-              isEditing ? "Lưu thay đổi" : "Thêm bác sĩ"
-            )}
+            {isLoading ? "Đang xử lý..." : "Lưu thay đổi"}
           </Button>
         </Modal.Footer>
       </Modal>
