@@ -106,21 +106,22 @@ namespace Hospital_API.Services
             };
 
             var templatePath = Path.Combine(_env.ContentRootPath, "Templates", "RegisterNoti.html");
-            var html = await File.ReadAllTextAsync(templatePath);
+            // Removed email sending logic
+            // var html = await File.ReadAllTextAsync(templatePath);
            
-            html = html.Replace("{{FullName}}", user.FullName)
-               .Replace("{{Username}}", user.Username)
-               .Replace("{{Email}}", user.Email)
-               .Replace("{{Phone}}", user.Phone)
-               .Replace("{{CreatedDate}}", DateTime.Now.ToString("dd/MM/yyyy"));
+            // html = html.Replace("{{FullName}}", user.FullName)
+            //    .Replace("{{Username}}", user.Username)
+            //    .Replace("{{Email}}", user.Email)
+            //    .Replace("{{Phone}}", user.Phone)
+            //    .Replace("{{CreatedDate}}", DateTime.Now.ToString("dd/MM/yyyy"));
 
-            var emailDto = new EmailDTO
-            {
-                To = user.Email,
-                Subject = "Đăng ký tài khoản - Medical Care Support",
-                Body = html
-            };
-            await _emailService.SendEmailAsync(emailDto);
+            // var emailDto = new EmailDTO
+            // {
+            //     To = user.Email,
+            //     Subject = "Đăng ký tài khoản - Medical Care Support",
+            //     Body = html
+            // };
+            // await _emailService.SendEmailAsync(emailDto);
 
 
             await _authRepository.CreateUserAsync(user);
@@ -189,21 +190,22 @@ namespace Hospital_API.Services
                 throw new Exception("Current password is incorrect");
 
             var templatePath = Path.Combine(_env.ContentRootPath, "Templates", "ChangePasswordNoti.html");
-            var html = await File.ReadAllTextAsync(templatePath);
+            // Removed email sending logic
+            // var html = await File.ReadAllTextAsync(templatePath);
            
-            html = html.Replace("{{FullName}}", user.FullName)
-               .Replace("{{Username}}", user.Username)
-               .Replace("{{Email}}", user.Email)
-               .Replace("{{Phone}}", user.Phone)
-               .Replace("{{ChangedDate}}", DateTime.Now.ToString("dd/MM/yyyy"));
+            // html = html.Replace("{{FullName}}", user.FullName)
+            //    .Replace("{{Username}}", user.Username)
+            //    .Replace("{{Email}}", user.Email)
+            //    .Replace("{{Phone}}", user.Phone)
+            //    .Replace("{{ChangedDate}}", DateTime.Now.ToString("dd/MM/yyyy"));
 
-            var emailDto = new EmailDTO
-            {
-                To = user.Email,
-                Subject = "Đổi mật khẩu tài khoản - Medical Care Support",
-                Body = html
-            };
-            await _emailService.SendEmailAsync(emailDto);
+            // var emailDto = new EmailDTO
+            // {
+            //     To = user.Email,
+            //     Subject = "Đổi mật khẩu tài khoản - Medical Care Support",
+            //     Body = html
+            // };
+            // await _emailService.SendEmailAsync(emailDto);
 
 
 
