@@ -135,25 +135,26 @@ namespace Hospital_API.Services
             var user = await __userRepo.GetByIdAsync(userId);
                 if (user == null) throw new Exception("Không tìm thấy người dùng");
 
-            var templatePath = Path.Combine(_env.ContentRootPath, "Templates", "BookingNoti.html");
-                        var html = await File.ReadAllTextAsync(templatePath);
+            // Removed email sending logic
+            // var templatePath = Path.Combine(_env.ContentRootPath, "Templates", "BookingNoti.html");
+            //             var html = await File.ReadAllTextAsync(templatePath);
 
-                        html = html.Replace("{{FullName}}", user.FullName)
-                        .Replace("{{Username}}", user.Username)
-                        .Replace("{{Email}}", user.Email)
-                        .Replace("{{Phone}}", user.Phone)
-                        .Replace("{{AppointmentDate}}", appointmentDto.AppointmentDate.ToString("dd/MM/yyyy"))
-                        .Replace("{{AppointmentTime}}", $"{appointmentDto.StartTime:hh\\:mm} - {appointmentDto.EndTime:hh\\:mm}")
-                        .Replace("{{DoctorName}}", appointmentDto.DoctorName ?? "N/A")
-                        .Replace("{{BranchName}}", appointmentDto.BranchName ?? "N/A");
+            //             html = html.Replace("{{FullName}}", user.FullName)
+            //             .Replace("{{Username}}", user.Username)
+            //             .Replace("{{Email}}", user.Email)
+            //             .Replace("{{Phone}}", user.Phone)
+            //             .Replace("{{AppointmentDate}}", appointmentDto.AppointmentDate.ToString("dd/MM/yyyy"))
+            //             .Replace("{{AppointmentTime}}", $"{appointmentDto.StartTime:hh\\:mm} - {appointmentDto.EndTime:hh\\:mm}")
+            //             .Replace("{{DoctorName}}", appointmentDto.DoctorName ?? "N/A")
+            //             .Replace("{{BranchName}}", appointmentDto.BranchName ?? "N/A");
 
-                        var emailDto = new EmailDTO
-                        {
-                            To = user.Email,
-                            Subject = "Thông tin lịch hẹn khám bệnh - Medical Care Support",
-                            Body = html
-                        };
-                        await _emailService.SendEmailAsync(emailDto);
+            //             var emailDto = new EmailDTO
+            //             {
+            //                 To = user.Email,
+            //                 Subject = "Thông tin lịch hẹn khám bệnh - Medical Care Support",
+            //                 Body = html
+            //             };
+            //             await _emailService.SendEmailAsync(emailDto);
 
 
 
